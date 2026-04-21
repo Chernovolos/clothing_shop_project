@@ -1,0 +1,221 @@
+
+@layer components {
+    .btn {
+        @apply px-4 py-2 rounded-lg font-medium
+        text-primary-foreground
+        hover:opacity-90;
+        background-color: var(--color-primary);
+    }
+
+    .section-category {
+        @apply pt-12;
+    }
+
+    .category-title {
+        @apply pb-20 text-5xl font-extralight;
+        letter-spacing: 0.02em;
+    }
+
+    .card {
+        @apply p-4 rounded-xl border bg-bg;
+        border-color: var(--color-border);
+    }
+
+    .container {
+        @apply w-full max-w-96 mx-auto px-4;
+    }
+
+    .nav {
+        @apply relative flex gap-3 justify-between z-10;
+    }
+
+    .nav-link {
+        @apply text-base text-text uppercase;
+    }
+
+    .nav-item {
+        @apply py-8;
+    }
+
+    .nav-link-gender {
+        @apply relative inline-block px-4;
+    }
+
+    .nav-link-gender:hover {
+        color: var(--color-surface);
+    }
+
+    .nav-link-gender::after {
+        content: "";
+        @apply absolute left-0 h-0.5 w-full bg-primary;
+        bottom: -30px;
+        @apply transition-transform duration-300 origin-left scale-x-0;
+        background-color: var(--color-primary);
+    }
+
+    .nav-link-gender.isActive::after {
+        @apply scale-x-100;
+    }
+
+    .nav-link-gender.isActive {
+        color: var(--color-primary);
+    }
+
+
+    .logo-icon {
+        @apply pr-8;
+    }
+
+    .actions-wrapper {
+        @apply flex gap-4 items-center;
+    }
+
+    .currency-select {
+        @apply flex gap-2 bg-transparent border-0 text-text py-1;
+    }
+
+    .btn-basket {
+        @apply bg-transparent border-0 rounded-xl p-2;
+        border-color: var(--color-surface);
+    }
+
+    .currency-select-wrapper {
+        @apply relative;
+    }
+
+    .currency-dropdown {
+        @apply absolute flex bg-(--color-bg) flex-col transition-all duration-400 right-0 -left-8 mt-2 w-full min-w-max rounded-md shadow-lg;
+    }
+
+    .currency-dropdown-item {
+        @apply flex
+        items-center
+        gap-2
+        justify-center
+        bg-(--color-bg)
+        pb-4 pt-4 pl-8 pr-9 cursor-pointer hover:bg-active w-full;
+    }
+
+    .currency-text {
+        @apply text-text;
+    }
+
+    .card-container {
+        @apply relative transition-shadow duration-300;
+    }
+
+    .card-container:hover {
+        /*@apply shadow-sm inset-shadow-xs opacity-75;*/
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    .card-body {
+        @apply p-4;
+    }
+
+    .card-image {
+        @apply aspect-square overflow-hidden;
+    }
+
+    .card-image > img {
+        @apply w-full h-full object-cover;
+    }
+
+    .card-title {
+        @apply pt-5 text-lg font-light text-gray-700;
+        /*color: var(--color-surface);*/
+        color: oklch(0.83 0 0);
+    }
+
+    .card-price {
+        @apply text-xl font-normal text-black pt-2;
+    }
+
+    .btn-card {
+        @apply flex absolute bottom-11 right-6 h-15 w-15 rounded-full items-center justify-center shadow-md;
+
+        background-color: oklch(0.77 0.16 149.73);
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(10px);
+        transition: all 0.3s ease;
+    }
+
+    .btn-card > img {
+        @apply w-6 h-6 object-cover;
+    }
+
+    .group:hover .btn-card {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+    .embla__viewport {
+        overflow: hidden;
+    }
+
+    .embla__container {
+        display: flex;
+        touch-action: pan-y pinch-zoom;
+    }
+
+    .embla__slide {
+        flex: 0 0 100%;
+        min-width: 0;
+    }
+
+    .product-btn-wrapper {
+        @apply flex flex-row gap-2.5 mb-5;
+    }
+
+    .btn-size {
+        display: flex;
+        align-content: center;
+        justify-content: center;
+        background-color: var(--color-bg);
+        border-radius: unset;
+        padding: 10px 27px;
+        border: 1px solid black;
+        color: black;
+        text-align: center;
+        text-transform: uppercase;
+        font-size: 14px;
+        width: 50px;
+
+    }
+
+    .section-product-details {
+        @apply mt-14
+    }
+
+    .product-title {
+        font-size: 30px;
+        font-weight: 600;
+        line-height: 1.1;
+        margin-bottom: 5px;
+    }
+
+    .product-subtitle {
+        font-size: 28px;
+        font-weight: 400;
+        opacity: 0.85;
+        line-height: 1.2;
+        margin-bottom: 25px;
+    }
+
+    .product-size {
+        font-family: "Roboto Condensed", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        text-transform: uppercase;
+    }
+
+    .product-color {
+        font-family: "Roboto Condensed", sans-serif;
+        font-weight: 700;
+        font-size: 16px;
+        text-transform: uppercase;
+    }
+
+}

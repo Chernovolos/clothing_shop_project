@@ -1,0 +1,56 @@
+@layer base {
+    html {
+        @apply bg-bg text-text;
+        font-family: "Raleway", sans-serif;
+        font-style: normal;
+        line-height: 1.5;
+        letter-spacing: var(--tracking-wide);
+    }
+
+    body {
+        margin: 0;
+        min-height: 100%;
+        overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font: inherit;
+    }
+
+    p {
+        margin: 0;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    ul,
+    ol {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    img {
+        display: block;
+        max-width: 100%;
+    }
+
+    button {
+        cursor: pointer;
+        font: inherit;
+    }
+
+    input,
+    textarea,
+    select {
+        font: inherit;
+    }
+}

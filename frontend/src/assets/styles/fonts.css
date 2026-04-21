@@ -1,0 +1,56 @@
+@font-face {
+    font-family: "Raleway";
+    src: url("../../../public/fonts/Raleway/static/Raleway-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Raleway";
+    src: url("../../../public/fonts/Raleway/static/Raleway-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Raleway";
+    src: url("../../../public/fonts/Raleway/static/Raleway-Medium.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Raleway";
+    src: url("../../../public/fonts/Raleway/static/Raleway-SemiBold.ttf") format("truetype");
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+/*Roboto Condensed*/
+@font-face {
+    font-family: "Roboto Condensed";
+    src: url("../../../public/fonts/Roboto_Condensed/static/RobotoCondensed-Light.ttf") format("truetype");
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Roboto Condensed";
+    src: url("../../../public/fonts/Roboto_Condensed/static/RobotoCondensed-Regular.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Roboto Condensed";
+    src: url("../../../public/fonts/Roboto_Condensed/static/RobotoCondensed-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}

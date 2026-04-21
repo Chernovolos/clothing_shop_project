@@ -1,0 +1,563 @@
+import type { Product } from "../types/Product";
+import { COLORS } from "../constants/colors";
+import { CATEGORIES, SUBCATEGORIES } from "../constants/categories";
+import type { Category } from "@/types/Category.ts";
+
+export const product_categories: Category[] = [
+  { id: 1, category_name: "T-Shirts" },
+  { id: 2, category_name: "Jeans" },
+  { id: 3, category_name: "Jackets" },
+  { id: 4, category_name: "Blazers" },
+  { id: 5, category_name: "Shirts" },
+];
+
+export const products_for_woman: Product[] = [
+  // COTTON SHIRTS
+  {
+    id: 1,
+    title: "Striped Cotton Shirt",
+    category: CATEGORIES[4],
+    subcategory: SUBCATEGORIES[8],
+    description: "A stylish shirt for any occasion.",
+    gender: "women",
+    stock: [
+      { color: COLORS[0],size: "XS", available: 10 },
+      { color: COLORS[0],size: "S", available: 15 },
+      { color: COLORS[0],size: "M", available: 20 },
+      { color: COLORS[1],size: "XS", available: 10 },
+      { color: COLORS[1],size: "S", available: 15 },
+      { color: COLORS[1],size: "M", available: 20 },
+      { color: COLORS[2],size: "XS", available: 10 },
+      { color: COLORS[2],size: "S", available: 15 },
+      { color: COLORS[2],size: "M", available: 20 },
+    ],
+    price: 1500.99,
+    images: [
+      "/images/woman/shirts/cotton/cotton_blue_1.jpg",
+      "/images/woman/shirts/cotton/cotton_blue_2.jpg",
+      "/images/woman/shirts/cotton/cotton_blue_3.jpg",
+      "/images/woman/shirts/cotton/cotton_blue_4.jpg",
+      "/images/woman/shirts/cotton/cotton_blue_5.jpg",
+    ],
+  },
+  {
+    id: 2,
+    title: "Striped Cotton Shirt",
+    category: CATEGORIES[5],
+    subcategory: SUBCATEGORIES[8],
+    description: "A stylish shirt for any occasion.",
+    gender: "women",
+    stock: [
+    ],
+    price: 1500.99,
+    images: [
+      "/images/woman/shirts/cotton/cotton_pink_1.jpg",
+      "/images/woman/shirts/cotton/cotton_pink_2.jpg",
+      "/images/woman/shirts/cotton/cotton_pink_3.jpg",
+      "/images/woman/shirts/cotton/cotton_pink_4.jpg",
+      "/images/woman/shirts/cotton/cotton_pink_5.jpg",
+    ],
+  },
+  {
+    id: 3,
+    title: "Striped Cotton Shirt",
+    category: CATEGORIES[5],
+    subcategory: SUBCATEGORIES[8],
+    description: "A stylish shirt for any occasion.",
+    gender: "women",
+    stock: [
+    ],
+    price: 1500.99,
+    images: [
+      "/images/woman/shirts/cotton/cotton_white_1.jpg",
+      "/images/woman/shirts/cotton/cotton_white_2.jpg",
+      "/images/woman/shirts/cotton/cotton_white_3.jpg",
+      "/images/woman/shirts/cotton/cotton_white_4.jpg",
+      "/images/woman/shirts/cotton/cotton_white_5.jpg",
+    ],
+  },
+
+  // JEANS
+  {
+    id: 4,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[0],
+    description: "A stylish jeans for any occasion.",
+    gender: "women",
+    stock: [
+    ],
+    price: 1200.99,
+    images: [
+      "/images/woman/jeans/baggy/baggy_blue_1.jpg",
+      "/images/woman/jeans/baggy/baggy_blue_2.jpg",
+      "/images/woman/jeans/baggy/baggy_blue_3.jpg",
+      "/images/woman/jeans/baggy/baggy_blue_4.jpg",
+      "/images/woman/jeans/baggy/baggy_blue_5.jpg",
+    ],
+  },
+  {
+    id: 5,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[0],
+    description: "A stylish jeans for any occasion.",
+    gender: "women",
+    stock: [
+    ],
+    price: 1200.99,
+    images: [
+      "/images/woman/jeans/baggy/baggy_sky_blue_1.jpg",
+      "/images/woman/jeans/baggy/baggy_sky_blue_2.jpg",
+      "/images/woman/jeans/baggy/baggy_sky_blue_3.jpg",
+      "/images/woman/jeans/baggy/baggy_sky_blue_4.jpg",
+      "/images/woman/jeans/baggy/baggy_sky_blue_5.jpg",
+    ],
+  },
+  {
+    id: 6,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[1],
+    description: "A stylish jeans for any occasion.",
+    gender: "women",
+    stock: [
+    ],
+    price: 1200.99,
+    images: [
+      "/images/woman/jeans/high_waist/high_waist_blue_1.jpg",
+      "/images/woman/jeans/high_waist/high_waist_blue_2.jpg",
+      "/images/woman/jeans/high_waist/high_waist_blue_3.jpg",
+      "/images/woman/jeans/high_waist/high_waist_blue_4.jpg",
+      "/images/woman/jeans/high_waist/high_waist_blue_5.jpg",
+    ],
+  },
+  {
+    id: 7,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[1],
+    description: "A stylish jeans for any occasion.",
+    gender: "women",
+    stock: [
+    ],
+    price: 1200.99,
+    images: [
+      "/images/woman/jeans/high_waist/high_waist_light_1.jpg",
+      "/images/woman/jeans/high_waist/high_waist_light_2.jpg",
+      "/images/woman/jeans/high_waist/high_waist_light_3.jpg",
+      "/images/woman/jeans/high_waist/high_waist_light_4.jpg",
+      "/images/woman/jeans/high_waist/high_waist_light_5.jpg",
+    ],
+  },
+  {
+    id: 8,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[2],
+    description: "A stylish jeans for any occasion.",
+    gender: "women",
+    stock: [
+    ],
+    price: 1200.99,
+    images: [
+      "/images/woman/jeans/mom_fit/mom_fit_brown_1.jpg",
+      "/images/woman/jeans/mom_fit/mom_fit_brown_2.jpg",
+      "/images/woman/jeans/mom_fit/mom_fit_brown_3.jpg",
+      "/images/woman/jeans/mom_fit/mom_fit_brown_4.jpg",
+      "/images/woman/jeans/mom_fit/mom_fit_brown_5.jpg",
+    ],
+  },
+  {
+    id: 9,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[2],
+    description: "A stylish jeans for any occasion.",
+    gender: "women",
+    stock: [
+    ],
+    price: 1500.99,
+    images: [
+      "/images/woman/jeans/mom_fit/mom_fit_gray_1.jpg",
+      "/images/woman/jeans/mom_fit/mom_fit_gray_2.jpg",
+      "/images/woman/jeans/mom_fit/mom_fit_gray_3.jpg",
+      "/images/woman/jeans/mom_fit/mom_fit_gray_4.jpg",
+      "/images/woman/jeans/mom_fit/mom_fit_gray_5.jpg",
+    ],
+  },
+
+  // BLAZERS
+  {
+    id: 10,
+    title: "Blazer",
+    category: CATEGORIES[3],
+    subcategory: SUBCATEGORIES[8],
+    description: "A stylish blazer for any occasion.",
+    gender: "women",
+    stock: [
+    ],
+    price: 1200.99,
+    images: [
+      "/images/woman/blazers/blazer_black_1.jpg",
+    ],
+  },
+];
+
+export const products_for_man: Product[] = [
+  // SHIRTS
+  {
+    id: 11,
+    title: "Shirt",
+    category: CATEGORIES[4],
+    subcategory: SUBCATEGORIES[7],
+    description: "A stylish shirt for any occasion.",
+    gender: "men",
+    stock: [
+    ],
+    price: 1550.99,
+    images: [
+      "/images/man/shirts/shirt_black_1.jpg",
+    ],
+  },
+  {
+    id: 12,
+    title: "Shirt",
+    category: CATEGORIES[4],
+    subcategory: SUBCATEGORIES[7],
+    description: "A stylish shirt for any occasion.",
+    gender: "men",
+    stock: [
+    ],
+    price: 1550.99,
+    images: [
+      "/images/man/shirts/shirt_sky_blue_1.jpg",
+    ],
+  },
+  {
+    id: 13,
+    title: "Shirt",
+    category: CATEGORIES[4],
+    subcategory: SUBCATEGORIES[7],
+    description: "A stylish shirt for any occasion.",
+    gender: "men",
+    stock: [
+
+    ],
+    price: 1550.99,
+    images: [
+      "/images/man/shirts/shirt_white_1.jpg",
+    ],
+  },
+
+  // JEANS
+  {
+    id: 14,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[3],
+    description: "A stylish jeans for any occasion.",
+    gender: "men",
+    stock: [
+
+    ],
+    price: 1550.99,
+    images: [
+      "/images/man/jeans/baloon/baloon_black_1.jpg",
+    ],
+  },
+  {
+    id: 15,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[3],
+    description: "A stylish jeans for any occasion.",
+    gender: "men",
+    stock: [
+
+    ],
+    price: 1550.99,
+    images: [
+      "/images/man/jeans/baloon/baloon_blue_1.jpg",
+    ],
+  },
+  {
+    id: 16,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[3],
+    description: "A stylish jeans for any occasion.",
+    gender: "men",
+    stock: [
+
+    ],
+    price: 1550.99,
+    images: [
+      "/images/man/jeans/baloon/baloon_indigo_1.jpg",
+    ],
+  },
+  {
+    id: 17,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[4],
+    description: "A stylish jeans for any occasion.",
+    gender: "men",
+    stock: [
+
+    ],
+    price: 1700.99,
+    images: [
+      "/images/man/jeans/mid/cotton_grey_1.jpg",
+    ],
+  },
+  {
+    id: 18,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[4],
+    description: "A stylish jeans for any occasion.",
+    gender: "men",
+    stock: [
+
+    ],
+    price: 1700.99,
+    images: [
+      "/images/man/jeans/mid/cotton_black_1.jpg",
+    ],
+  },
+  {
+    id: 19,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[4],
+    description: "A stylish jeans for any occasion.",
+    gender: "men",
+    stock: [
+
+    ],
+    price: 1700.99,
+    images: [
+      "/images/man/jeans/mid/mid_blue_1.jpg",
+    ],
+  },
+
+  // JACKETS
+  {
+    id: 20,
+    title: "Jacket",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[9],
+    description: "A stylish jacket for any occasion.",
+    gender: "men",
+    stock: [
+    ],
+    price: 2000.99,
+    images: [
+      "/images/man/jackets/cotton/cotton_blue_1.jpg",
+    ],
+  },
+  {
+    id: 21,
+    title: "Jacket",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[9],
+    description: "A stylish jacket for any occasion.",
+    gender: "men",
+    stock: [
+    ],
+    price: 2000.99,
+    images: [
+      "/images/man/jackets/cotton/cotton_blue_1.jpg",
+    ],
+  },
+
+  {
+    id: 22,
+    title: "Jacket",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[9],
+    description: "A stylish jacket for any occasion.",
+    gender: "men",
+    stock: [
+
+    ],
+    price: 2000.99,
+    images: [
+      "/images/man/jackets/cotton/cotton_red_1.jpg",
+    ],
+  },
+  {
+    id: 23,
+    title: "Jacket",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[9],
+    description: "A stylish jacket for any occasion.",
+    gender: "men",
+    stock: [
+
+    ],
+    price: 2000.99,
+    images: [
+      "/images/man/jackets/cotton/cotton_sand_1.jpg",
+    ],
+  },
+];
+
+export const products_for_kids: Product[] = [
+  // SHIRTS
+  {
+    id: 24,
+    title: "Shirt",
+    category: CATEGORIES[4],
+    subcategory: SUBCATEGORIES[7],
+    description: "A stylish shirt for any occasion.",
+    gender: "kids",
+    stock: [
+
+    ],
+    price: 2000.99,
+    images: [
+      "/images/kids/shirts/shirt_blue_1.jpg",
+    ],
+  },
+  {
+    id: 25,
+    title: "Shirt",
+    category: CATEGORIES[4],
+    subcategory: SUBCATEGORIES[7],
+    description: "A stylish shirt for any occasion.",
+    gender: "kids",
+    stock: [
+
+    ],
+    price: 2000.99,
+    images: [
+      "/images/kids/shirts/shirt_pink_1.jpg",
+    ],
+  },
+  {
+    id: 26,
+    title: "Shirt",
+    category: CATEGORIES[4],
+    subcategory: SUBCATEGORIES[7],
+    description: "A stylish shirt for any occasion.",
+    gender: "kids",
+    stock: [
+
+    ],
+    price: 2000.99,
+    images: [
+      "/images/kids/shirts/shirt_red_1.jpg",
+    ],
+  },
+
+  // JEANS
+  {
+    id: 27,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[5],
+    description: "A stylish pair of jeans for any occasion.",
+    gender: "kids",
+    stock: [
+
+    ],
+    price: 2000.99,
+    images: [
+      "/images/kids/jeans/barrel/barrel_black_1.jpg",
+    ],
+  },
+  {
+    id: 28,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[5],
+    description: "A stylish pair of jeans for any occasion.",
+    gender: "kids",
+    stock: [
+
+    ],
+    price: 2000.99,
+    images: [
+      "/images/kids/jeans/barrel/barrel_blue_1.jpg",
+    ],
+  },
+  {
+    id: 29,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[5],
+    description: "A stylish pair of jeans for any occasion.",
+    gender: "kids",
+    stock: [
+
+    ],
+    price: 2000.99,
+    images: [
+      "/images/kids/jeans/barrel/barrel_light_blue_1.jpg",
+    ],
+  },
+  {
+    id: 30,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[6],
+    description: "A stylish pair of jeans for any occasion.",
+    gender: "kids",
+    stock: [
+
+    ],
+    price: 2000.99,
+    images: [
+      "/images/kids/jeans/straight/straight_black_1.jpg",
+    ],
+  },
+  {
+    id: 31,
+    title: "Jeans",
+    category: CATEGORIES[1],
+    subcategory: SUBCATEGORIES[6],
+    description: "A stylish pair of jeans for any occasion.",
+    gender: "kids",
+    stock: [
+
+    ],
+    price: 2000.99,
+    images: [
+      "/images/kids/jeans/straight/straight_blue_1.jpg",
+    ],
+  },
+
+  // JACKETS
+  {
+    id: 32,
+    title: "Jacket",
+    category: CATEGORIES[2],
+    subcategory: SUBCATEGORIES[9],
+    description: "A stylish jacket for any occasion.",
+    gender: "kids",
+    stock: [
+
+    ],
+    price: 2000.99,
+    images: [
+      "/images/kids/jeans/straight/straight_black_1.jpg",
+    ],
+  },
+  {
+    id: 33,
+    title: "Jacket",
+    category: CATEGORIES[2],
+    subcategory: SUBCATEGORIES[9],
+    description: "A stylish jacket for any occasion.",
+    gender: "kids",
+    stock: [
+
+    ],
+    price: 2000.99,
+    images: [
+      "/images/kids/jeans/straight/straight_blue_1.jpg",
+    ],
+  },
+];

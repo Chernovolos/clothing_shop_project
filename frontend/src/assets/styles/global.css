@@ -1,0 +1,25 @@
+@import "tailwindcss";
+@import "./fonts.css";
+
+@theme {
+  --color-bg: #ffffff;
+  --color-text: #000000;
+
+  --color-surface: #43464e;
+  --color-border: #43464e;
+
+  --color-primary: oklch(0.77 0.16 149.73);
+  --color-primary-foreground: #ffffff;
+  --color-active: #eeeeee;
+}
+
+.dark {
+  --color-bg: #000000;
+  --color-text: #ffffff;
+
+  --color-surface: #1a1a1a;
+  --color-border: #43464e;
+
+  --color-primary: #1dcf65;
+  --color-primary-foreground: #000000;
+}
