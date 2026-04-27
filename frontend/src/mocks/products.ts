@@ -4,11 +4,11 @@ import { CATEGORIES, SUBCATEGORIES } from "../constants/categories";
 import type { Category } from "@/types/Category.ts";
 
 export const product_categories: Category[] = [
-  { id: 1, category_name: "T-Shirts" },
-  { id: 2, category_name: "Jeans" },
-  { id: 3, category_name: "Jackets" },
-  { id: 4, category_name: "Blazers" },
-  { id: 5, category_name: "Shirts" },
+  {id: 1, category_name: "T-Shirts"},
+  {id: 2, category_name: "Jeans"},
+  {id: 3, category_name: "Jackets"},
+  {id: 4, category_name: "Blazers"},
+  {id: 5, category_name: "Shirts"},
 ];
 
 export const products_for_woman: Product[] = [
@@ -21,15 +21,15 @@ export const products_for_woman: Product[] = [
     description: "A stylish shirt for any occasion.",
     gender: "women",
     stock: [
-      { color: COLORS[0],size: "XS", available: 10 },
-      { color: COLORS[0],size: "S", available: 15 },
-      { color: COLORS[0],size: "M", available: 20 },
-      { color: COLORS[1],size: "XS", available: 10 },
-      { color: COLORS[1],size: "S", available: 15 },
-      { color: COLORS[1],size: "M", available: 20 },
-      { color: COLORS[2],size: "XS", available: 10 },
-      { color: COLORS[2],size: "S", available: 15 },
-      { color: COLORS[2],size: "M", available: 20 },
+      {color: COLORS[0], size: "XS", available: 10},
+      {color: COLORS[0], size: "S", available: 15},
+      {color: COLORS[0], size: "M", available: 20},
+      {color: COLORS[1], size: "XS", available: 10},
+      {color: COLORS[1], size: "S", available: 15},
+      // { color: COLORS[1],size: "M", available: 20 },
+      {color: COLORS[2], size: "XS", available: 10},
+      {color: COLORS[4], size: "S", available: 0},
+      // { color: COLORS[2],size: "M", available: 20 },
     ],
     price: 1500.99,
     images: [
@@ -48,6 +48,15 @@ export const products_for_woman: Product[] = [
     description: "A stylish shirt for any occasion.",
     gender: "women",
     stock: [
+      {color: COLORS[0], size: "XS", available: 10},
+      {color: COLORS[3], size: "S", available: 15},
+      {color: COLORS[4], size: "M", available: 20},
+      {color: COLORS[1], size: "XS", available: 10},
+      {color: COLORS[3], size: "S", available: 15},
+      // { color: COLORS[1],size: "M", available: 20 },
+      {color: COLORS[1], size: "XS", available: 0},
+      {color: COLORS[5], size: "S", available: 1},
+      // { color: COLORS[2],size: "M", available: 20 },
     ],
     price: 1500.99,
     images: [
@@ -66,6 +75,8 @@ export const products_for_woman: Product[] = [
     description: "A stylish shirt for any occasion.",
     gender: "women",
     stock: [
+      {color: COLORS[10], size: "XS", available: 0},
+      {color: COLORS[11], size: "S", available: 0},
     ],
     price: 1500.99,
     images: [
@@ -78,130 +89,126 @@ export const products_for_woman: Product[] = [
   },
 
   // JEANS
-  {
-    id: 4,
-    title: "Jeans",
-    category: CATEGORIES[1],
-    subcategory: SUBCATEGORIES[0],
-    description: "A stylish jeans for any occasion.",
-    gender: "women",
-    stock: [
-    ],
-    price: 1200.99,
-    images: [
-      "/images/woman/jeans/baggy/baggy_blue_1.jpg",
-      "/images/woman/jeans/baggy/baggy_blue_2.jpg",
-      "/images/woman/jeans/baggy/baggy_blue_3.jpg",
-      "/images/woman/jeans/baggy/baggy_blue_4.jpg",
-      "/images/woman/jeans/baggy/baggy_blue_5.jpg",
-    ],
-  },
-  {
-    id: 5,
-    title: "Jeans",
-    category: CATEGORIES[1],
-    subcategory: SUBCATEGORIES[0],
-    description: "A stylish jeans for any occasion.",
-    gender: "women",
-    stock: [
-    ],
-    price: 1200.99,
-    images: [
-      "/images/woman/jeans/baggy/baggy_sky_blue_1.jpg",
-      "/images/woman/jeans/baggy/baggy_sky_blue_2.jpg",
-      "/images/woman/jeans/baggy/baggy_sky_blue_3.jpg",
-      "/images/woman/jeans/baggy/baggy_sky_blue_4.jpg",
-      "/images/woman/jeans/baggy/baggy_sky_blue_5.jpg",
-    ],
-  },
-  {
-    id: 6,
-    title: "Jeans",
-    category: CATEGORIES[1],
-    subcategory: SUBCATEGORIES[1],
-    description: "A stylish jeans for any occasion.",
-    gender: "women",
-    stock: [
-    ],
-    price: 1200.99,
-    images: [
-      "/images/woman/jeans/high_waist/high_waist_blue_1.jpg",
-      "/images/woman/jeans/high_waist/high_waist_blue_2.jpg",
-      "/images/woman/jeans/high_waist/high_waist_blue_3.jpg",
-      "/images/woman/jeans/high_waist/high_waist_blue_4.jpg",
-      "/images/woman/jeans/high_waist/high_waist_blue_5.jpg",
-    ],
-  },
-  {
-    id: 7,
-    title: "Jeans",
-    category: CATEGORIES[1],
-    subcategory: SUBCATEGORIES[1],
-    description: "A stylish jeans for any occasion.",
-    gender: "women",
-    stock: [
-    ],
-    price: 1200.99,
-    images: [
-      "/images/woman/jeans/high_waist/high_waist_light_1.jpg",
-      "/images/woman/jeans/high_waist/high_waist_light_2.jpg",
-      "/images/woman/jeans/high_waist/high_waist_light_3.jpg",
-      "/images/woman/jeans/high_waist/high_waist_light_4.jpg",
-      "/images/woman/jeans/high_waist/high_waist_light_5.jpg",
-    ],
-  },
-  {
-    id: 8,
-    title: "Jeans",
-    category: CATEGORIES[1],
-    subcategory: SUBCATEGORIES[2],
-    description: "A stylish jeans for any occasion.",
-    gender: "women",
-    stock: [
-    ],
-    price: 1200.99,
-    images: [
-      "/images/woman/jeans/mom_fit/mom_fit_brown_1.jpg",
-      "/images/woman/jeans/mom_fit/mom_fit_brown_2.jpg",
-      "/images/woman/jeans/mom_fit/mom_fit_brown_3.jpg",
-      "/images/woman/jeans/mom_fit/mom_fit_brown_4.jpg",
-      "/images/woman/jeans/mom_fit/mom_fit_brown_5.jpg",
-    ],
-  },
-  {
-    id: 9,
-    title: "Jeans",
-    category: CATEGORIES[1],
-    subcategory: SUBCATEGORIES[2],
-    description: "A stylish jeans for any occasion.",
-    gender: "women",
-    stock: [
-    ],
-    price: 1500.99,
-    images: [
-      "/images/woman/jeans/mom_fit/mom_fit_gray_1.jpg",
-      "/images/woman/jeans/mom_fit/mom_fit_gray_2.jpg",
-      "/images/woman/jeans/mom_fit/mom_fit_gray_3.jpg",
-      "/images/woman/jeans/mom_fit/mom_fit_gray_4.jpg",
-      "/images/woman/jeans/mom_fit/mom_fit_gray_5.jpg",
-    ],
-  },
-
-  // BLAZERS
-  {
-    id: 10,
-    title: "Blazer",
-    category: CATEGORIES[3],
-    subcategory: SUBCATEGORIES[8],
-    description: "A stylish blazer for any occasion.",
-    gender: "women",
-    stock: [
-    ],
-    price: 1200.99,
-    images: [
-      "/images/woman/blazers/blazer_black_1.jpg",
-    ],
-  },
+  // {
+  //   id: 4,
+  //   title: "Jeans",
+  //   category: CATEGORIES[1],
+  //   subcategory: SUBCATEGORIES[0],
+  //   description: "A stylish jeans for any occasion.",
+  //   gender: "women",
+  //   stock: [],
+  //   price: 1200.99,
+  //   images: [
+  //     "/images/woman/jeans/baggy/baggy_blue_1.jpg",
+  //     "/images/woman/jeans/baggy/baggy_blue_2.jpg",
+  //     "/images/woman/jeans/baggy/baggy_blue_3.jpg",
+  //     "/images/woman/jeans/baggy/baggy_blue_4.jpg",
+  //     "/images/woman/jeans/baggy/baggy_blue_5.jpg",
+  //   ],
+  // },
+  // {
+  //   id: 5,
+  //   title: "Jeans",
+  //   category: CATEGORIES[1],
+  //   subcategory: SUBCATEGORIES[0],
+  //   description: "A stylish jeans for any occasion.",
+  //   gender: "women",
+  //   stock: [
+  //     {color: COLORS[0], size: "XS", available: 0},
+  //     {color: COLORS[0], size: "S", available: 0},
+  //   ],
+  //   price: 1200.99,
+  //   images: [
+  //     "/images/woman/jeans/baggy/baggy_sky_blue_1.jpg",
+  //     "/images/woman/jeans/baggy/baggy_sky_blue_2.jpg",
+  //     "/images/woman/jeans/baggy/baggy_sky_blue_3.jpg",
+  //     "/images/woman/jeans/baggy/baggy_sky_blue_4.jpg",
+  //     "/images/woman/jeans/baggy/baggy_sky_blue_5.jpg",
+  //   ],
+  // },
+  // {
+  //   id: 6,
+  //   title: "Jeans",
+  //   category: CATEGORIES[1],
+  //   subcategory: SUBCATEGORIES[1],
+  //   description: "A stylish jeans for any occasion.",
+  //   gender: "women",
+  //   stock: [],
+  //   price: 1200.99,
+  //   images: [
+  //     "/images/woman/jeans/high_waist/high_waist_blue_1.jpg",
+  //     "/images/woman/jeans/high_waist/high_waist_blue_2.jpg",
+  //     "/images/woman/jeans/high_waist/high_waist_blue_3.jpg",
+  //     "/images/woman/jeans/high_waist/high_waist_blue_4.jpg",
+  //     "/images/woman/jeans/high_waist/high_waist_blue_5.jpg",
+  //   ],
+  // },
+  // {
+  //   id: 7,
+  //   title: "Jeans",
+  //   category: CATEGORIES[1],
+  //   subcategory: SUBCATEGORIES[1],
+  //   description: "A stylish jeans for any occasion.",
+  //   gender: "women",
+  //   stock: [],
+  //   price: 1200.99,
+  //   images: [
+  //     "/images/woman/jeans/high_waist/high_waist_light_1.jpg",
+  //     "/images/woman/jeans/high_waist/high_waist_light_2.jpg",
+  //     "/images/woman/jeans/high_waist/high_waist_light_3.jpg",
+  //     "/images/woman/jeans/high_waist/high_waist_light_4.jpg",
+  //     "/images/woman/jeans/high_waist/high_waist_light_5.jpg",
+  //   ],
+  // },
+  // {
+  //   id: 8,
+  //   title: "Jeans",
+  //   category: CATEGORIES[1],
+  //   subcategory: SUBCATEGORIES[2],
+  //   description: "A stylish jeans for any occasion.",
+  //   gender: "women",
+  //   stock: [],
+  //   price: 1200.99,
+  //   images: [
+  //     "/images/woman/jeans/mom_fit/mom_fit_brown_1.jpg",
+  //     "/images/woman/jeans/mom_fit/mom_fit_brown_2.jpg",
+  //     "/images/woman/jeans/mom_fit/mom_fit_brown_3.jpg",
+  //     "/images/woman/jeans/mom_fit/mom_fit_brown_4.jpg",
+  //     "/images/woman/jeans/mom_fit/mom_fit_brown_5.jpg",
+  //   ],
+  // },
+  // {
+  //   id: 9,
+  //   title: "Jeans",
+  //   category: CATEGORIES[1],
+  //   subcategory: SUBCATEGORIES[2],
+  //   description: "A stylish jeans for any occasion.",
+  //   gender: "women",
+  //   stock: [],
+  //   price: 1500.99,
+  //   images: [
+  //     "/images/woman/jeans/mom_fit/mom_fit_gray_1.jpg",
+  //     "/images/woman/jeans/mom_fit/mom_fit_gray_2.jpg",
+  //     "/images/woman/jeans/mom_fit/mom_fit_gray_3.jpg",
+  //     "/images/woman/jeans/mom_fit/mom_fit_gray_4.jpg",
+  //     "/images/woman/jeans/mom_fit/mom_fit_gray_5.jpg",
+  //   ],
+  // },
+  //
+  // // BLAZERS
+  // {
+  //   id: 10,
+  //   title: "Blazer",
+  //   category: CATEGORIES[3],
+  //   subcategory: SUBCATEGORIES[8],
+  //   description: "A stylish blazer for any occasion.",
+  //   gender: "women",
+  //   stock: [],
+  //   price: 1200.99,
+  //   images: [
+  //     "/images/woman/blazers/blazer_black_1.jpg",
+  //   ],
+  // },
 ];
 
 export const products_for_man: Product[] = [
@@ -213,8 +220,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[7],
     description: "A stylish shirt for any occasion.",
     gender: "men",
-    stock: [
-    ],
+    stock: [],
     price: 1550.99,
     images: [
       "/images/man/shirts/shirt_black_1.jpg",
@@ -227,8 +233,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[7],
     description: "A stylish shirt for any occasion.",
     gender: "men",
-    stock: [
-    ],
+    stock: [],
     price: 1550.99,
     images: [
       "/images/man/shirts/shirt_sky_blue_1.jpg",
@@ -241,9 +246,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[7],
     description: "A stylish shirt for any occasion.",
     gender: "men",
-    stock: [
-
-    ],
+    stock: [],
     price: 1550.99,
     images: [
       "/images/man/shirts/shirt_white_1.jpg",
@@ -258,9 +261,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[3],
     description: "A stylish jeans for any occasion.",
     gender: "men",
-    stock: [
-
-    ],
+    stock: [],
     price: 1550.99,
     images: [
       "/images/man/jeans/baloon/baloon_black_1.jpg",
@@ -273,9 +274,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[3],
     description: "A stylish jeans for any occasion.",
     gender: "men",
-    stock: [
-
-    ],
+    stock: [],
     price: 1550.99,
     images: [
       "/images/man/jeans/baloon/baloon_blue_1.jpg",
@@ -288,9 +287,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[3],
     description: "A stylish jeans for any occasion.",
     gender: "men",
-    stock: [
-
-    ],
+    stock: [],
     price: 1550.99,
     images: [
       "/images/man/jeans/baloon/baloon_indigo_1.jpg",
@@ -303,9 +300,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[4],
     description: "A stylish jeans for any occasion.",
     gender: "men",
-    stock: [
-
-    ],
+    stock: [],
     price: 1700.99,
     images: [
       "/images/man/jeans/mid/cotton_grey_1.jpg",
@@ -318,9 +313,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[4],
     description: "A stylish jeans for any occasion.",
     gender: "men",
-    stock: [
-
-    ],
+    stock: [],
     price: 1700.99,
     images: [
       "/images/man/jeans/mid/cotton_black_1.jpg",
@@ -333,9 +326,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[4],
     description: "A stylish jeans for any occasion.",
     gender: "men",
-    stock: [
-
-    ],
+    stock: [],
     price: 1700.99,
     images: [
       "/images/man/jeans/mid/mid_blue_1.jpg",
@@ -350,8 +341,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[9],
     description: "A stylish jacket for any occasion.",
     gender: "men",
-    stock: [
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/man/jackets/cotton/cotton_blue_1.jpg",
@@ -364,8 +354,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[9],
     description: "A stylish jacket for any occasion.",
     gender: "men",
-    stock: [
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/man/jackets/cotton/cotton_blue_1.jpg",
@@ -379,9 +368,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[9],
     description: "A stylish jacket for any occasion.",
     gender: "men",
-    stock: [
-
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/man/jackets/cotton/cotton_red_1.jpg",
@@ -394,9 +381,7 @@ export const products_for_man: Product[] = [
     subcategory: SUBCATEGORIES[9],
     description: "A stylish jacket for any occasion.",
     gender: "men",
-    stock: [
-
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/man/jackets/cotton/cotton_sand_1.jpg",
@@ -413,9 +398,7 @@ export const products_for_kids: Product[] = [
     subcategory: SUBCATEGORIES[7],
     description: "A stylish shirt for any occasion.",
     gender: "kids",
-    stock: [
-
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/kids/shirts/shirt_blue_1.jpg",
@@ -428,9 +411,7 @@ export const products_for_kids: Product[] = [
     subcategory: SUBCATEGORIES[7],
     description: "A stylish shirt for any occasion.",
     gender: "kids",
-    stock: [
-
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/kids/shirts/shirt_pink_1.jpg",
@@ -443,9 +424,7 @@ export const products_for_kids: Product[] = [
     subcategory: SUBCATEGORIES[7],
     description: "A stylish shirt for any occasion.",
     gender: "kids",
-    stock: [
-
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/kids/shirts/shirt_red_1.jpg",
@@ -460,9 +439,7 @@ export const products_for_kids: Product[] = [
     subcategory: SUBCATEGORIES[5],
     description: "A stylish pair of jeans for any occasion.",
     gender: "kids",
-    stock: [
-
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/kids/jeans/barrel/barrel_black_1.jpg",
@@ -475,9 +452,7 @@ export const products_for_kids: Product[] = [
     subcategory: SUBCATEGORIES[5],
     description: "A stylish pair of jeans for any occasion.",
     gender: "kids",
-    stock: [
-
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/kids/jeans/barrel/barrel_blue_1.jpg",
@@ -490,9 +465,7 @@ export const products_for_kids: Product[] = [
     subcategory: SUBCATEGORIES[5],
     description: "A stylish pair of jeans for any occasion.",
     gender: "kids",
-    stock: [
-
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/kids/jeans/barrel/barrel_light_blue_1.jpg",
@@ -505,9 +478,7 @@ export const products_for_kids: Product[] = [
     subcategory: SUBCATEGORIES[6],
     description: "A stylish pair of jeans for any occasion.",
     gender: "kids",
-    stock: [
-
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/kids/jeans/straight/straight_black_1.jpg",
@@ -520,9 +491,7 @@ export const products_for_kids: Product[] = [
     subcategory: SUBCATEGORIES[6],
     description: "A stylish pair of jeans for any occasion.",
     gender: "kids",
-    stock: [
-
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/kids/jeans/straight/straight_blue_1.jpg",
@@ -537,9 +506,7 @@ export const products_for_kids: Product[] = [
     subcategory: SUBCATEGORIES[9],
     description: "A stylish jacket for any occasion.",
     gender: "kids",
-    stock: [
-
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/kids/jeans/straight/straight_black_1.jpg",
@@ -552,9 +519,7 @@ export const products_for_kids: Product[] = [
     subcategory: SUBCATEGORIES[9],
     description: "A stylish jacket for any occasion.",
     gender: "kids",
-    stock: [
-
-    ],
+    stock: [],
     price: 2000.99,
     images: [
       "/images/kids/jeans/straight/straight_blue_1.jpg",

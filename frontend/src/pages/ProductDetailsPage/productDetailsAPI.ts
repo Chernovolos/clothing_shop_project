@@ -22,11 +22,11 @@ export const fetchProductById = createAsyncThunk<Product, FetchProductArgs>(
     const products = dataMap[gender];
 
     const product = products.find((item) => {
-      console.log("product", item);
+      // console.log("product", item);
       return item.id === +id;
     });
 
-    console.log("result", product)
+    // console.log("result", product)
     if (!product) {
       throw new Error("Product not found");
     }

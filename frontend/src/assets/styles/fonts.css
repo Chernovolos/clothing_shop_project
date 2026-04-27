@@ -30,6 +30,14 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: "Raleway";
+    src: url("../../../public/fonts/Raleway/static/Raleway-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
 /*Roboto Condensed*/
 @font-face {
     font-family: "Roboto Condensed";
