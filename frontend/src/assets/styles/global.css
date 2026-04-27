@@ -3,7 +3,9 @@
 
 @theme {
   --color-bg: #ffffff;
+  --color-bg-dark: #1D1F22;
   --color-text: #000000;
+  --color-text-light:  #ffffff;
 
   --color-surface: #43464e;
   --color-border: #43464e;
