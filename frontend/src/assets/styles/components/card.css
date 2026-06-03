@@ -1,0 +1,68 @@
+@layer components {
+
+    .card {
+        @apply p-4 rounded-xl border;
+        border-color: var(--color-border);
+        background-color: var(--color-bg);
+    }
+
+    .card-container {
+        @apply relative transition-shadow duration-300;
+    }
+
+    .card-container:hover {
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-body {
+        @apply p-4;
+        cursor: pointer;
+    }
+
+    .card-image {
+        @apply aspect-square overflow-hidden;
+    }
+
+    .card-image > img {
+        @apply w-full h-full object-cover;
+    }
+
+    .card-title {
+        @apply pt-5 text-lg font-light;
+        opacity: 0.5;
+        color: var(--color-text);
+    }
+
+    .card-price {
+        @apply text-xl font-normal text-black pt-2;
+    }
+
+    .btn-card {
+        display: flex;
+        position: absolute;
+        bottom: 44px;
+        right: 24px;
+        height: 60px;
+        width: 60px;
+        border-radius: 9999px;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        background-color: var(--color-bg-secondary);
+        opacity: 0;
+        visibility: hidden;
+        cursor: pointer;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .btn-card > img {
+        @apply w-6 h-6 object-cover;
+    }
+
+    .group:hover .btn-card {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+    }
+
+}

@@ -1,13 +1,12 @@
 import useEmblaCarousel from "embla-carousel-react";
 import { useEffect, useState, useCallback } from "react";
 
-// const images = [1, 2, 3];
 type Props = {
   images: string[];
   outOfStock: boolean;
 };
 
-const EmblaCarousel = ({images = [], outOfStock}: Props) => {
+const ProductDetailsCarousel = ({images = [], outOfStock}: Props) => {
   if (!images.length) return null;
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel();
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
@@ -17,7 +16,6 @@ const EmblaCarousel = ({images = [], outOfStock}: Props) => {
   });
 
   const [selectedIndex, setSelectedIndex] = useState(0);
-  console.log("outOfStock", outOfStock)
 
   const onThumbClick = useCallback(
     (index: number) => {
@@ -39,24 +37,9 @@ const EmblaCarousel = ({images = [], outOfStock}: Props) => {
 
     emblaMainApi.on('select', onSelect).on('reInit', onSelect)
   }, [emblaMainApi, onSelect])
-  // useEffect(() => {
-  //   if (!emblaMainApi) return;
-  //
-  //   const onSelect = () => {
-  //     const index = emblaMainApi.selectedScrollSnap();
-  //     setSelectedIndex(index);
-  //     emblaThumbsApi?.scrollTo(index);
-  //   };
-  //
-  //   emblaMainApi.on("select", onSelect);
-  //   onSelect();
-  //
-  //   return () => emblaMainApi.off("select", onSelect);
-  // }, [emblaMainApi, emblaThumbsApi]);
-
 
   return (
-    <div className="flex gap-4 max-w-3x">
+    <div className="flex gap-8 max-w-3x">
 
       {/*THUMBS LEFT*/ }
       <div className="overflow-hidden h-130" ref={ emblaThumbsRef }>
@@ -65,7 +48,7 @@ const EmblaCarousel = ({images = [], outOfStock}: Props) => {
             <div
               key={ i }
               onClick={ () => onThumbClick(i) }
-              className={ `relative cursor-pointer h-20 w-20 border-2 flex items-center justify-center ${
+              className={ `relative cursor-pointer h-23 w-22 border-2 flex items-center justify-center ${
                 i === selectedIndex ? "border-gray-700" : "border-transparent"
               } ${ outOfStock ? "opacity-45" : "" }` }
             >
@@ -103,9 +86,8 @@ const EmblaCarousel = ({images = [], outOfStock}: Props) => {
           )) }
         </div>
       </div>
-
     </div>
   )
 }
 
-export default EmblaCarousel;
+export default ProductDetailsCarousel;

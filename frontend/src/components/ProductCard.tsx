@@ -1,13 +1,11 @@
-import type { Product } from "../types/Product.ts";
-import { useNavigate } from "react-router-dom";
-import Basket from "../../public/images/icons/empty_basket.svg";
 import { useParams } from "react-router";
+import { useNavigate } from "react-router-dom";
+import type { Product } from "../types/Product.ts";
+import Basket from "../../public/images/icons/empty_basket.svg";
 
 const ProductCard = (({title, price, images, id}: Product) => {
-
   const navigate = useNavigate();
-  const { category, cartId } = useParams();
-  console.log("category", category, cartId);
+  const { category } = useParams();
 
   const handleClick = () => {
     navigate(`/${category}/${id}`);

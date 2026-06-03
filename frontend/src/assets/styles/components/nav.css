@@ -1,0 +1,99 @@
+@layer components {
+    .header-root {
+        position: fixed;
+        top: 0;
+        right: 0;
+        left: 0;
+        z-index: 998;
+    }
+
+    .actions-wrapper {
+        @apply flex gap-4 items-center;
+    }
+
+    .nav {
+        @apply relative flex gap-3 justify-between z-10;
+        background-color: var(--color-bg);
+    }
+
+    .nav-link {
+        @apply text-base uppercase;
+        color: var(--color-text);
+    }
+
+    .nav-item {
+        @apply py-8;
+    }
+
+    .nav-link-gender {
+        position: relative;
+        display: inline-block;
+        align-items: center;
+
+        padding: 0 16px;
+        height: 2rem;
+        color: var(--color-text);
+        transition: color 200ms ease;
+    }
+
+    .nav-link-gender:hover {
+        color: var(--color-surface);
+    }
+
+    .nav-link-gender::after {
+        content: "";
+        position: absolute;
+        left: 5px;
+        right: 5px;
+        bottom: -8px;
+        height: 2px;
+        background-color: var(--color-bg-secondary);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform;
+    }
+
+    .nav-link-gender.isActive::after {
+        transform: scaleX(1);
+    }
+
+    .nav-link-gender.isActive {
+        color: var(--color-primary);
+    }
+
+
+    .logo-icon {
+        @apply pr-8;
+    }
+
+    .badge {
+        position: absolute;
+        top: -0.5rem;
+        right: -0.5rem;
+
+        min-width: 1.5rem;
+        height: 1.5rem;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border-radius: 9999px;
+        background-color: black;
+        color: white;
+
+        font-size: 0.75rem;
+        font-weight: 700;
+
+        pointer-events: none;
+    }
+
+    .btn-basket {
+        @apply bg-transparent border-0 rounded-xl p-2;
+        border-color: var(--color-surface);
+    }
+
+}
