@@ -1,5 +1,12 @@
 @import "tailwindcss";
+@import "./global.css";
 @import "./fonts.css";
 @import "./base.css";
-@import "./components.css";
-@import "./global.css";
+@import "./components/nav.css";
+@import "./components/cart.css";
+@import "./components/card.css";
+@import "./components/product-card.css";
+@import "./components/mobile-menu.css";
+@import "./components/currency-dropdown.css";
+@import "./components/embla-carousel.css";
+

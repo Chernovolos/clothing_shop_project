@@ -15,7 +15,7 @@ export const products_for_woman: Product[] = [
   // COTTON SHIRTS
   {
     id: 1,
-    title: "Striped Cotton Shirt",
+    title: "Striped Cotton Shirt 1",
     category: CATEGORIES[4],
     subcategory: SUBCATEGORIES[8],
     description: "A stylish shirt for any occasion.",
@@ -42,7 +42,7 @@ export const products_for_woman: Product[] = [
   },
   {
     id: 2,
-    title: "Striped Cotton Shirt",
+    title: "Striped Cotton Shirt 2",
     category: CATEGORIES[5],
     subcategory: SUBCATEGORIES[8],
     description: "A stylish shirt for any occasion.",
@@ -69,7 +69,7 @@ export const products_for_woman: Product[] = [
   },
   {
     id: 3,
-    title: "Striped Cotton Shirt",
+    title: "Striped Cotton Shirt 3",
     category: CATEGORIES[5],
     subcategory: SUBCATEGORIES[8],
     description: "A stylish shirt for any occasion.",

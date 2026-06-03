@@ -1,9 +1,9 @@
 @layer base {
     html {
-        @apply bg-bg text-text;
-        font-family: "Raleway", sans-serif;
+        font-family: var(--font-raleway), sans-serif;
         font-style: normal;
         line-height: 1.5;
+        font-size: 1rem;
         letter-spacing: var(--tracking-wide);
     }
 
@@ -18,9 +18,7 @@
     h3,
     h4,
     h5,
-    h6 {
-        font: inherit;
-    }
+    h6 {}
 
     p {
         margin: 0;
@@ -45,12 +43,17 @@
 
     button {
         cursor: pointer;
-        font: inherit;
     }
 
     input,
     textarea,
-    select {
-        font: inherit;
+    select {}
+
+    .container {
+        @apply w-full max-w-96 mx-auto px-4;
+    }
+
+    .section {
+        position: relative;
     }
 }

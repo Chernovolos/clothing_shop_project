@@ -1,0 +1,32 @@
+@layer components {
+
+    .currency-select-wrapper {
+        @apply relative;
+    }
+
+    .currency-select {
+        @apply flex gap-2 bg-transparent border-0 py-1;
+        color: var(--color-text);
+    }
+
+    .currency-dropdown {
+        @apply absolute flex bg-(--color-bg) flex-col transition-all duration-400 right-0 -left-8 mt-2 w-full min-w-max rounded-md shadow-lg;
+    }
+
+    .currency-dropdown-item {
+        @apply flex
+        items-center
+        gap-2
+        justify-center
+        pb-4 pt-4 pl-8 pr-9 cursor-pointer w-full;
+    }
+
+    .currency-dropdown-item:hover {
+        background-color: var(--color-surface);
+    }
+
+    .currency-text {
+        color: var(--color-text);
+    }
+
+}
