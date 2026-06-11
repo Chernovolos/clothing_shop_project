@@ -1,12 +1,13 @@
 import useEmblaCarousel from "embla-carousel-react";
 import { useEffect, useState, useCallback } from "react";
+import type { ImageDto } from "@/types/dtos/image.dto.ts";
 
 type Props = {
-  images: string[];
+  images: ImageDto[];
   outOfStock: boolean;
 };
 
-const ProductDetailsCarousel = ({images = [], outOfStock}: Props) => {
+const ProductDetailsCarousel = ({images = [], outOfStock }: Props) => {
   if (!images.length) return null;
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel();
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
@@ -15,7 +16,10 @@ const ProductDetailsCarousel = ({images = [], outOfStock}: Props) => {
     containScroll: "keepSnaps",
   });
 
+
   const [selectedIndex, setSelectedIndex] = useState(0);
+  // const outOfStock = stocks.some((s) => s.available === 0);
+  console.log("selectedIndex", selectedIndex);
 
   const onThumbClick = useCallback(
     (index: number) => {
@@ -32,14 +36,17 @@ const ProductDetailsCarousel = ({images = [], outOfStock}: Props) => {
   }, [emblaMainApi, emblaThumbsApi, setSelectedIndex])
 
   useEffect(() => {
-    if (!emblaMainApi) return
-    onSelect()
-
-    emblaMainApi.on('select', onSelect).on('reInit', onSelect)
+    if (!emblaMainApi) return;
+    onSelect();
+    emblaMainApi.on('select', onSelect).on('reInit', onSelect);
+    return () => {
+      emblaMainApi.off('select', onSelect)
+      emblaMainApi.off('reInit', onSelect)
+    }
   }, [emblaMainApi, onSelect])
 
   return (
-    <div className="flex gap-8 max-w-3x">
+    <div className="flex gap-8 max-w-3xl">
 
       {/*THUMBS LEFT*/ }
       <div className="overflow-hidden h-130" ref={ emblaThumbsRef }>
@@ -52,7 +59,7 @@ const ProductDetailsCarousel = ({images = [], outOfStock}: Props) => {
                 i === selectedIndex ? "border-gray-700" : "border-transparent"
               } ${ outOfStock ? "opacity-45" : "" }` }
             >
-              <img src={ img } alt={ `thumb-${ i }` } className="object-cover w-full h-full"/>
+              <img src={ img.url } alt={ `thumb-${ i }` } className="object-cover w-full h-full"/>
               { outOfStock && (
                 <div className="absolute flex items-center justify-center">
                   <span className="out-of-stock-thumb-left-title">
@@ -71,10 +78,10 @@ const ProductDetailsCarousel = ({images = [], outOfStock}: Props) => {
           { images.map((img, i) => (
             <div
               key={ i }
-              className={ `relative min-w-full h-130 flex items-center justify-center text-4xl font-bold bg-gray-200
+              className={ `relative min-w-full h-130 flex items-center justify-center text-4xl font-bold bg-gray-200 border-2 border-gray-700
                 ${ outOfStock ? "opacity-45" : "" } ` }
             >
-              <img src={ img } alt={ `thumb-${ i }` } className="object-cover w-full h-full"/>
+              <img src={ img.url } alt={ `thumb-${ i }` } className="object-cover w-full h-full"/>
               { outOfStock && (
                 <div className="absolute flex items-center justify-center">
                   <span className="out-of-stock-main-title">

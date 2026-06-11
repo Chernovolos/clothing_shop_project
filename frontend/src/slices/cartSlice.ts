@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { createOrder, deleteOrder, updateOrderThunk } from "@/pages/CartPage/cartApi.ts";
 import type { CartItem } from "@/types/Product.ts";
 import type { RootState } from "@/app/store.ts";
 import type { Order } from "@/types/Order.ts";
@@ -9,7 +8,7 @@ interface CartState {
   order: Order | null,
   isCartItemsLoading: boolean,
   error: null | string
-};
+}
 
 const initialState: CartState = {
   cartItems: [],
@@ -21,40 +20,38 @@ const initialState: CartState = {
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {
-
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(createOrder.pending, (state) => {
-        state.error = null;
-      })
-      .addCase(createOrder.fulfilled, (state, action) => {
-        state.order = action.payload;
-      })
-      .addCase(createOrder.rejected, (state, action) => {
-        state.error = action.error.message || "Something went wrong";
-      })
-
-      .addCase(deleteOrder.pending, (state) => {
-        state.error = null;
-      })
-      .addCase(deleteOrder.fulfilled, (state, action) => {
-        state.order = action.payload;
-      })
-      .addCase(deleteOrder.rejected, (state, action) => {
-        state.error = action.error.message || "Something went wrong";
-      })
-
-      .addCase(updateOrderThunk.pending, (state) => {
-        state.error = null;
-      })
-      .addCase(updateOrderThunk.fulfilled, (state, action) => {
-        state.order = action.payload;
-      })
-      .addCase(updateOrderThunk.rejected, (state, action) => {
-        state.error = action.error.message || "Something went wrong";
-      })
+    // .addCase(createOrder.pending, (state) => {
+    //   state.error = null;
+    // })
+    // .addCase(createOrder.fulfilled, (state, action) => {
+    //   state.order = action.payload;
+    // })
+    // .addCase(createOrder.rejected, (state, action) => {
+    //   state.error = action.error.message || "Something went wrong";
+    // })
+    //
+    // .addCase(deleteOrder.pending, (state) => {
+    //   state.error = null;
+    // })
+    // .addCase(deleteOrder.fulfilled, (state, action) => {
+    //   state.order = action.payload;
+    // })
+    // .addCase(deleteOrder.rejected, (state, action) => {
+    //   state.error = action.error.message || "Something went wrong";
+    // })
+    //
+    // .addCase(updateOrderThunk.pending, (state) => {
+    //   state.error = null;
+    // })
+    // .addCase(updateOrderThunk.fulfilled, (state, action) => {
+    //   state.order = action.payload;
+    // })
+    // .addCase(updateOrderThunk.rejected, (state, action) => {
+    //   state.error = action.error.message || "Something went wrong";
+    // })
 
 
   },
@@ -63,11 +60,11 @@ export const cartSlice = createSlice({
 export const selectOrder = (state: RootState) => state.cartSlice.order;
 
 export const selectTotalQuantity = (
-  state: RootState
+  state: RootState,
 ) =>
   state.cartSlice.order?.items.reduce(
     (acc, item) => acc + item.quantity,
-    0
+    0,
   ) ?? 0;
 
 export default cartSlice.reducer;

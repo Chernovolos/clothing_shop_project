@@ -17,6 +17,7 @@
     .card-body {
         @apply p-4;
         cursor: pointer;
+        background-color: var(--color-surface);
     }
 
     .card-image {
