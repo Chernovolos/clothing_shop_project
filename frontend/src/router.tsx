@@ -1,19 +1,19 @@
 import { createBrowserRouter } from "react-router-dom";
-import HomePage from "./pages/HomePage";
+import Home from "./pages/Home.tsx";
 import App from "./App";
-import ProductPage from "@/pages/ProductPage/ProductPage.tsx";
-import ProductDetailsPage from "@/pages/ProductDetailsPage/ProductDetailsPage.tsx";
-import CartPage from "@/pages/CartPage/CartPage.tsx";
+import Product from "@/pages/Product/Product.tsx";
+import ProductDetails from "@/pages/ProductDetails/ProductDetails.tsx";
+import Cart from "@/pages/Cart/Cart.tsx";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     element: <App/>,
     children: [
-      {path: "", element: <HomePage/>},
-      {path: ":category", element: <ProductPage/>},
-      {path: ":category/:id", element: <ProductDetailsPage/>},
-      {path: "order", element: <CartPage/>},
+      {path: "", element: <Home/>},
+      {path: ":category", element: <Product/>},
+      {path: ":category/:id", element: <ProductDetails/>},
+      {path: "order", element: <Cart/>},
     ],
   },
 ]);

@@ -1,6 +1,6 @@
 import ProductCart from "@/components/ProductCart.tsx";
 import { useAppSelector } from "@/app/hooks.ts";
-import { selectOrder, selectTotalQuantity } from "@/slices/cartSlice.ts";
+import { selectOrder, selectTotalQuantity } from "@/slices/cart.slice.ts";
 import { useNavigate } from "react-router-dom";
 
 type Props = {

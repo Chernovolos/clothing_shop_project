@@ -5,7 +5,7 @@ import Basket from "../../public/images/icons/basket.svg";
 import CurrencySelect from "./CurrencySelect";
 import MiniCart from "@/components/MiniCart.tsx";
 import { useAppSelector } from "@/app/hooks.ts";
-import { selectOrder, selectTotalQuantity } from "@/slices/cartSlice.ts";
+import { selectOrder, selectTotalQuantity } from "@/slices/cart.slice.ts";
 
 const Header = () => {
   const [isCartOpen, setCartOpen] = useState(false);

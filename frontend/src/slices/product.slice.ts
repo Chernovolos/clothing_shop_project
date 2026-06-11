@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../app/store.ts";
-import { getProductById } from "@/pages/ProductDetailsPage/productDetailsAPI.ts";
-import { getProducts } from "@/pages/ProductPage/productApi.ts";
+import { getProductById } from "@/pages/ProductDetails/product-details.api.ts";
+import { getProducts } from "@/pages/Product/product.api.ts";
 import type { ProductDetailsDto } from "@/types/dtos/product.dto.ts";
 
 interface ProductState {

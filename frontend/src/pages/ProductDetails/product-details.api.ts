@@ -1,6 +1,6 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ProductDetailsDto } from "@/types/dtos/product.dto.ts";
-import apiService from "@/services/ApiService.ts";
+import apiService from "@/services/api.service.ts";
 import axios from "axios";
 
 // type FetchProductArgs = {
