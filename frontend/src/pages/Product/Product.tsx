@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
-import { selectProducts, selectIsProductsLoading, resetProducts } from "@/slices/productSlice.ts";
+import { selectProducts, selectIsProductsLoading, resetProducts } from "@/slices/product.slice.ts";
 import { CATEGORY_MAP, PRODUCT_CATEGORY } from "@/types/enums/product.enums.ts";
-import { getProducts } from "@/pages/ProductPage/productApi.ts";
+import { getProducts } from "@/pages/Product/product.api.ts";
 import ProductCard from "../../components/ProductCard.tsx";
 
-const ProductPage: React.FC = () => {
+const Product: React.FC = () => {
   const { category } = useParams<{ category: 'women' | 'men' | 'kids' }>();
 
   const dispatch = useAppDispatch();
@@ -50,4 +50,4 @@ const ProductPage: React.FC = () => {
   );
 };
 
-export default ProductPage;
+export default Product;

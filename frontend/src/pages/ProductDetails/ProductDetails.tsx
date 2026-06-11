@@ -3,11 +3,11 @@ import { useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
 import { useProductStock } from "@/hooks/useProductStock.ts";
 import ProductDetailsCarousel from "@/components/ProductDetailsCarousel.tsx";
-import { selectIsProductLoading, selectProduct } from "@/slices/productSlice.ts";
-import { getProductById } from "@/pages/ProductDetailsPage/productDetailsAPI.ts";
+import { selectIsProductLoading, selectProduct } from "@/slices/product.slice.ts";
+import { getProductById } from "@/pages/ProductDetails/product-details.api.ts";
 import { type ProductSize, sizeToLabel } from "@/types/enums/product.enums.ts";
 
-const ProductDetailsPage = () => {
+const ProductDetails = () => {
   const {id} = useParams<{ id: string }>();
 
   const normalizedProductId = id ? parseInt(id, 10) : null;
@@ -214,4 +214,4 @@ const ProductDetailsPage = () => {
   )
 }
 
-export default ProductDetailsPage;
+export default ProductDetails;

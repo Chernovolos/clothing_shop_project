@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { ProductDetailsDto, ProductFilterDto } from "@/types/dtos/product.dto.ts";
 import axios from "axios";
-import apiService from "@/services/ApiService.ts";
+import apiService from "@/services/api.service.ts";
 
 interface MyKnownError {
   message: string;

@@ -1,9 +1,9 @@
 // import ProductCart from "@/components/ProductCart.tsx";
 // import { useAppSelector } from "@/app/hooks.ts";
-// import { selectOrder } from "@/slices/cartSlice.ts";
+// import { selectOrder } from "@/slices/cart.slice.ts";
 
 
-const CartPage = () => {
+const Cart = () => {
 
   // const order = useAppSelector(selectOrder);
 
@@ -37,4 +37,4 @@ const CartPage = () => {
   )
 }
 
-export default CartPage;
+export default Cart;
