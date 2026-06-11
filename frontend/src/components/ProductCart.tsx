@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { Size } from "@/types/Size.ts";
 import type { Color } from "@/types/Color.ts";
 import { useAppDispatch } from "@/app/hooks.ts";
-import { deleteOrder, updateOrderThunk } from "@/pages/CartPage/cartApi.ts";
+// import { deleteOrder, updateOrderThunk } from "@/pages/CartPage/cartApi.ts";
 import type { CartItem } from "@/types/Product.ts";
 import ProductCartCarousel from "@/components/ProductCartCarousel.tsx";
 
@@ -14,7 +14,7 @@ type Props = OrderProduct & {
 
 const ProductCart = ({id, size, color, product, quantity, variant}: Props) => {
 
-  const dispatch = useAppDispatch();
+  // const dispatch = useAppDispatch();
   const {
     stockAvailabilityMap,
     availableColors,
@@ -23,6 +23,7 @@ const ProductCart = ({id, size, color, product, quantity, variant}: Props) => {
 
   const [selectedSize, setSelectedSize] = useState<Size | null>(size);
   const [selectedColor, setSelectedColor] = useState<Color | null>(color);
+
 
   useEffect(() => {
     setSelectedSize(size);
@@ -73,27 +74,27 @@ const ProductCart = ({id, size, color, product, quantity, variant}: Props) => {
   const handleDeleteItem = () => {
     if (!selectedColor || !selectedSize) return;
 
-    const deletedItem: CartItem = {
-      id: product.id,
-      quantity: 1,
-      color: selectedColor,
-      size: selectedSize,
-      price: product.price,
-    };
-    dispatch(deleteOrder(deletedItem));
+    // const deletedItem: CartItem = {
+    //   id: product.id,
+    //   quantity: 1,
+    //   color: selectedColor,
+    //   size: selectedSize,
+    //   price: product.price,
+    // };
+    // dispatch(deleteOrder(deletedItem));
   }
 
   const updateItem = () => {
     if (!selectedColor || !selectedSize) return;
-
-    const newItem: CartItem = {
-      id: id,
-      quantity: 1,
-      color: selectedColor,
-      size: selectedSize,
-      price: product.price,
-    };
-    dispatch(updateOrderThunk(newItem));
+    //
+    // const newItem: CartItem = {
+    //   id: id,
+    //   quantity: 1,
+    //   color: selectedColor,
+    //   size: selectedSize,
+    //   price: product.price,
+    // };
+    // dispatch(updateOrderThunk(newItem));
   };
 
   const currentQuantity = isAvailableSets(selectedColor, selectedSize);
@@ -109,40 +110,40 @@ const ProductCart = ({id, size, color, product, quantity, variant}: Props) => {
 
           <p className={ `cart-label ${ variant }` }>size:</p>
           <div className={ `cart-btn-wrapper ${ variant }` }>
-            {
-              availableSizes.map((size, index) => {
-                return (
-                  <button
-                    key={ index }
-                    onClick={ () => handleSizeChange(size) }
-                    className={
-                    `cart-btn-size ${ variant } ${ selectedSize === size ? "cart-btn-size--active" : "" }
-                  
-                    ${ isSizeAvailable(size) ? "" : "cart-btn-size--unavailable" }
-                    ` }
-                  >{ size }</button>
-                )
-              })
-            }
+            {/*{*/}
+            {/*  availableSizes.map((size, index) => {*/}
+            {/*    return (*/}
+            {/*      <button*/}
+            {/*        key={ index }*/}
+            {/*        onClick={ () => handleSizeChange(size) }*/}
+            {/*        className={*/}
+            {/*        `cart-btn-size ${ variant } ${ selectedSize === size ? "cart-btn-size--active" : "" }*/}
+            {/*      */}
+            {/*        ${ isSizeAvailable(size) ? "" : "cart-btn-size--unavailable" }*/}
+            {/*        ` }*/}
+            {/*      >{ size }</button>*/}
+            {/*    )*/}
+            {/*  })*/}
+            {/*}*/}
           </div>
 
           <p className={ `cart-label ${ variant }` }>color:</p>
           <div className={ `cart-btn-wrapper ${ variant }` }>
-            {
-              availableColors.map((color, index) => {
-                return (
-                  <button
-                    key={ index }
-                    onClick={ () => handleColorChange(color) }
-                    style={ {backgroundColor: color.hex} }
-                    className={ `cart-btn-color ${ variant } ${ selectedColor?.id === color.id ? "cart-btn-color--active" : "" }
-                    ${ isColorAvailable(color) ? "" : "cart-btn-color--disabled" }
-                    `
-                    }
-                  ></button>
-                )
-              })
-            }
+            {/*{*/}
+            {/*  availableColors.map((color, index) => {*/}
+            {/*    return (*/}
+            {/*      <button*/}
+            {/*        key={ index }*/}
+            {/*        onClick={ () => handleColorChange(color) }*/}
+            {/*        style={ {backgroundColor: color.hex} }*/}
+            {/*        className={ `cart-btn-color ${ variant } ${ selectedColor?.id === color.id ? "cart-btn-color--active" : "" }*/}
+            {/*        ${ isColorAvailable(color) ? "" : "cart-btn-color--disabled" }*/}
+            {/*        `*/}
+            {/*        }*/}
+            {/*      ></button>*/}
+            {/*    )*/}
+            {/*  })*/}
+            {/*}*/}
           </div>
         </div>
 

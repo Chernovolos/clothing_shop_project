@@ -1,11 +1,11 @@
 import type { CartItem, Product } from "@/types/Product.ts";
 import type { Order, OrderProduct } from "@/types/Order.ts";
-import { products_for_kids, products_for_man, products_for_woman } from "@/mocks/products.ts";
+// import { products_for_kids, products_for_man, products_for_woman } from "@/mocks/products.ts";
 
 const allProducts: Product[] = [
-  ...products_for_man,
-  ...products_for_woman,
-  ...products_for_kids,
+  // ...products_for_man,
+  // ...products_for_woman,
+  // ...products_for_kids,
 ];
 
 export default class MockOrderService {

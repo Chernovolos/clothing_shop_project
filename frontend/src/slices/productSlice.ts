@@ -1,15 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
 import type { RootState } from "../app/store.ts";
-import type { Product } from "../types/Product.ts";
-import { getCategories, getProducts } from "@/pages/ProductPage/categoryAPI.ts";
-import type { Category } from "@/types/Category.ts";
 import { getProductById } from "@/pages/ProductDetailsPage/productDetailsAPI.ts";
+import { getProducts } from "@/pages/ProductPage/productApi.ts";
+import type { ProductDetailsDto } from "@/types/dtos/product.dto.ts";
 
 interface ProductState {
-  product:  Product | null;
-  products: Product[];
-  categories: Category[];
+  product:  ProductDetailsDto | null;
+  products: ProductDetailsDto[];
   productError: string | null;
   productsError: string | null;
   CategoriesError: string | null;
@@ -21,7 +18,6 @@ interface ProductState {
 const initialState: ProductState = {
   product: null,
   products: [],
-  categories: [],
   productError: null,
   productsError: null,
   CategoriesError: null,
@@ -34,17 +30,8 @@ export const productSlice = createSlice({
   name: "product",
   initialState,
   reducers: {
-    setProduct: (state, action: PayloadAction<Product>) => {
-      state.product = action.payload;
-    },
-    clearSelectedProductDetails: (state) => {
-      state.product = null;
-    },
-    setProducts: (state, action: PayloadAction<Product[]>) => {
-      state.products = action.payload;
-    },
-    setCategories: (state, action: PayloadAction<Category[]>) => {
-      state.categories = action.payload;
+    resetProducts: (state) => {
+      state.products = [];
     }
   },
 
@@ -78,28 +65,13 @@ export const productSlice = createSlice({
         state.isProductsLoading = false;
         state.productsError = action.error.message || "Something went wrong";
       })
-
-    //CATEGORIES
-      .addCase(getCategories.pending, (state) => {
-        state.isCategoriesLoading = true;
-        state.CategoriesError = null;
-      })
-      .addCase(getCategories.fulfilled, (state, action) => {
-        state.isCategoriesLoading = false;
-        state.categories = action.payload;
-      })
-      .addCase(getCategories.rejected, (state, action) => {
-        state.isCategoriesLoading = false;
-        state.CategoriesError = action.error.message || "Something went wrong";
-      })
   },
 });
 
-export const { setProduct, setProducts, setCategories } = productSlice.actions;
+export const { resetProducts } = productSlice.actions;
 
 export const selectProduct = (state: RootState) => state.productSlice.product;
 export const selectProducts = (state: RootState) => state.productSlice.products;
-export const selectCategories = (state: RootState) => state.productSlice.categories;
 
 export const selectIsProductLoading = (state: RootState) => state.productSlice.isProductLoading;
 export const selectIsProductsLoading =  (state: RootState) => state.productSlice.isProductsLoading;
