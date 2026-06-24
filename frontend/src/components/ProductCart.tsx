@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { Size } from "@/types/Size.ts";
 import type { Color } from "@/types/Color.ts";
 // import { useAppDispatch } from "@/app/hooks.ts";
-// // import { deleteOrder, updateOrderThunk } from "@/pages/Cart/cart.api.ts";
+// // import { deleteOrder, updateOrderThunk } from "@/pages/Cart/cart.thunk.ts";
 // import type { CartItem } from "@/types/Product.ts";
 import ProductCartCarousel from "@/components/ProductCartCarousel.tsx";
 
@@ -13,13 +13,6 @@ type Props = OrderProduct & {
 };
 
 const ProductCart = ({size, color, product, quantity, variant}: Props) => {
-
-  // const dispatch = useAppDispatch();
-  // const {
-  //   stockAvailabilityMap,
-  //   availableColors,
-  //   availableSizes,
-  // } = useProductStock(product);
 
   const [selectedSize, setSelectedSize] = useState<Size | null>(size);
   const [selectedColor, setSelectedColor] = useState<Color | null>(color);

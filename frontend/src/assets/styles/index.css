@@ -9,4 +9,7 @@
 @import "./components/mobile-menu.css";
 @import "./components/currency-dropdown.css";
 @import "./components/embla-carousel.css";
-
+@import "./components/form.css";
+@import "./components/ad-hoc-stock-selector.css";
+@import "./components/authentication-required.css";
+@import "./components/profile.css";

@@ -8,7 +8,6 @@ type Props = {
 };
 
 const ProductDetailsCarousel = ({images = [], outOfStock }: Props) => {
-  if (!images.length) return null;
   const [emblaMainRef, emblaMainApi] = useEmblaCarousel();
   const [emblaThumbsRef, emblaThumbsApi] = useEmblaCarousel({
     axis: "y",
@@ -16,10 +15,7 @@ const ProductDetailsCarousel = ({images = [], outOfStock }: Props) => {
     containScroll: "keepSnaps",
   });
 
-
   const [selectedIndex, setSelectedIndex] = useState(0);
-  // const outOfStock = stocks.some((s) => s.available === 0);
-  console.log("selectedIndex", selectedIndex);
 
   const onThumbClick = useCallback(
     (index: number) => {
@@ -44,6 +40,10 @@ const ProductDetailsCarousel = ({images = [], outOfStock }: Props) => {
       emblaMainApi.off('reInit', onSelect)
     }
   }, [emblaMainApi, onSelect])
+
+  if (!images.length) {
+    return null;
+  }
 
   return (
     <div className="flex gap-8 max-w-3xl">

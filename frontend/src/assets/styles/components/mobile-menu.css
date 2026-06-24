@@ -22,7 +22,7 @@
 
         .mobile-menu {
             position: fixed;
-            top: 10%;
+            top: 0;
             left: 0;
             width: 100%;
             background-color: var(--color-bg);
@@ -47,7 +47,7 @@
 
         .overlay--mobile-menu {
             position: fixed;
-            top: 11%;
+            top: 0;
             left: 0;
             right: 0;
             bottom: 0;
@@ -67,6 +67,17 @@
         .overlay--mobile-menu.open {
             opacity: 1;
             pointer-events: auto;
+        }
+
+        .wrapper {
+            display: flex;
+            justify-content: end;
+            margin: 0 auto;
+            padding: 0 20px ;
+        }
+
+        .close-icon {
+            color: var(--color-text);
         }
 
     }

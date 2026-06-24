@@ -1,18 +1,26 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Logo from "../../public/images/icons/logo_transparent.svg";
-import Basket from "../../public/images/icons/basket.svg";
+import { useAppSelector } from "@/app/hooks.ts";
+import { Hamburger, LogIn, ShoppingCart, UserRound, X } from "lucide-react";
+import { selectOrder, selectTotalQuantity } from "@/slices/cart.slice.ts";
+import { selectIsAuthenticated } from "@/slices/user.slice.ts";
+import { useAuthModal } from "@/contexts/AuthModalContext";
 import CurrencySelect from "./CurrencySelect";
 import MiniCart from "@/components/MiniCart.tsx";
-import { useAppSelector } from "@/app/hooks.ts";
-import { selectOrder, selectTotalQuantity } from "@/slices/cart.slice.ts";
+import Profile from "@/components/Profile.tsx";
 
 const Header = () => {
   const [isCartOpen, setCartOpen] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isProfileOpen, setProfileOpen] = useState(false);
+
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const { openLogin } = useAuthModal();
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+  const profileRef = useRef<HTMLDivElement | null>(null);
 
   const order = useAppSelector(selectOrder);
   const totalQuantity = useAppSelector(selectTotalQuantity);
@@ -27,6 +35,11 @@ const Header = () => {
       if (isMobileMenuOpen && mobileMenuRef.current && !mobileMenuRef.current.contains(target)) {
         setMobileMenuOpen(false);
       }
+
+      if (isProfileOpen && profileRef.current && !profileRef.current.contains(target)) {
+        setProfileOpen(false);
+      }
+
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -34,22 +47,20 @@ const Header = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isMobileMenuOpen, isCartOpen]);
+  }, [isMobileMenuOpen, isCartOpen, isProfileOpen]);
 
   useEffect(() => {
-    if(isMobileMenuOpen || isCartOpen) {
-      document.body.style.overflowY = "hidden";
-    }
-     else {
-       document.body.style.overflowY = "auto";
-    }
+    document.body.style.overflowY =
+      isMobileMenuOpen || isCartOpen || isProfileOpen ? "hidden" : "auto";
+
     return () => {
-      document.body.style.overflow = "auto";
+      document.body.style.overflowY = "auto";
     };
-  }, [isMobileMenuOpen, isCartOpen]);
+  }, [isMobileMenuOpen, isCartOpen, isProfileOpen]);
 
   const closeCart = () => setCartOpen(false);
   const closeMobileMenu = () => setMobileMenuOpen(false);
+  const closeProfile = () => setProfileOpen(false);
 
   return (
     <section className="section">
@@ -100,61 +111,88 @@ const Header = () => {
                     className="btn-basket relative"
                     onClick={ () => setCartOpen(prev => !prev) }
                   >
-                    <img
-                      src={ Basket }
-                      alt="Clothing Store Logo"
-                      className="bascket-icon"
-                    />
-                    { order ?  <span className="badge">{totalQuantity}</span> : ""}
+                    <ShoppingCart color="#1D1F22" strokeWidth={ 1 } size={ 20 }/>
+                    { order ? <span className="badge">{ totalQuantity }</span> : "" }
                   </button>
-                  <MiniCart isOpen={ isCartOpen } onClose={ closeCart }/>
+                  <MiniCart
+                    isOpen={ isCartOpen }
+                    onClose={ closeCart }
+                  />
                 </div>
+
                 <button
                   aria-label="Menu"
                   onClick={ () => setMobileMenuOpen(!isMobileMenuOpen) }
-                  className={`btn-burger  ${isMobileMenuOpen ? "open" : ""}`}
-                >burger</button>
+                  className={ `btn-burger  ${ isMobileMenuOpen ? "open" : "" }` }>
+                  <Hamburger color="#1D1F22" strokeWidth={ 1 } size={ 20 }/>
+                </button>
 
+                { isAuthenticated ?
+                  (
+                    <div ref={ profileRef } className="profile-root">
+                      <button
+                        aria-label="Profile"
+                        onClick={() => setProfileOpen(prev => !prev)}
+                        className="btn-basket relative"
+                      >
+                          <UserRound color="#1D1F22" strokeWidth={ 1 } size={ 20 }/>
+                      </button>
+                      <Profile
+                        isOpen={ isProfileOpen }
+                        onClose={ closeProfile }
+                      />
+                    </div>
+                  ) :
+                  (<button onClick={ openLogin }>
+                    <LogIn color="#1D1F22" strokeWidth={ 1 } size={ 20 }/>
+                  </button>)
+                }
               </div>
             </div>
           </nav>
 
-          <div ref={mobileMenuRef} className="mobile-menu-root">
+          <div ref={ mobileMenuRef } className="mobile-menu-root">
             <div
-              onClick={() => closeMobileMenu()}
-              className={`overlay--mobile-menu ${isMobileMenuOpen ? "open" : ""}`}>
+              onClick={ () => closeMobileMenu() }
+              className={ `overlay--mobile-menu ${ isMobileMenuOpen ? "open" : "" }` }>
             </div>
-            <div className={`mobile-menu ${isMobileMenuOpen ? "open" : ""}`}>
-              <div className="mobile-menu-container">
-                <NavLink
-                  to="/women"
-                  className={ ({isActive}) =>
-                    `nav-link nav-link-gender ${ isActive ? "isActive" : "" }`
-                  }
-                >
-                  Women
-                </NavLink>
-                <NavLink
-                  to="/men"
-                  className={ ({isActive}) =>
-                    `nav-link nav-link-gender ${ isActive ? "isActive" : "" }`
-                  }
-                >
-                  Men
-                </NavLink>
-                <NavLink
-                  to="/kids"
-                  className={ ({isActive}) =>
-                    `nav-link nav-link-gender ${ isActive ? "isActive" : "" }`
-                  }
-                >
-                  Kids
-                </NavLink>
-              </div>
+            <div className={ `mobile-menu ${ isMobileMenuOpen ? "open" : "" }` }>
+              <div className="container">
+                <div className="wrapper">
+                  <button onClick={ () => closeMobileMenu() }>
+                    <X className="close-icon" strokeWidth={ 2 } size={ 20 }/>
+                  </button>
+                </div>
 
+                <div className="mobile-menu-container">
+                  <NavLink
+                    to="/women"
+                    className={ ({isActive}) =>
+                      `nav-link nav-link-gender ${ isActive ? "isActive" : "" }`
+                    }
+                  >
+                    Women
+                  </NavLink>
+                  <NavLink
+                    to="/men"
+                    className={ ({isActive}) =>
+                      `nav-link nav-link-gender ${ isActive ? "isActive" : "" }`
+                    }
+                  >
+                    Men
+                  </NavLink>
+                  <NavLink
+                    to="/kids"
+                    className={ ({isActive}) =>
+                      `nav-link nav-link-gender ${ isActive ? "isActive" : "" }`
+                    }
+                  >
+                    Kids
+                  </NavLink>
+                </div>
+              </div>
             </div>
           </div>
-
         </header>
       </div>
     </section>

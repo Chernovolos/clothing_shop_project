@@ -2,23 +2,21 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
 import { useProductStock } from "@/hooks/useProductStock.ts";
-import ProductDetailsCarousel from "@/components/ProductDetailsCarousel.tsx";
 import { selectIsProductLoading, selectProduct } from "@/slices/product.slice.ts";
-import { getProductById } from "@/pages/ProductDetails/product-details.api.ts";
 import { type ProductSize, sizeToLabel } from "@/types/enums/product.enums.ts";
+import { selectIsAuthenticated } from "@/slices/user.slice.ts";
+import AuthenticationRequired from "@/components/AuthenticationRequired.tsx";
+import ProductDetailsCarousel from "@/components/ProductDetailsCarousel.tsx";
+import { getProductById } from "@/thunk/product-details.thunk.ts";
 
 const ProductDetails = () => {
   const {id} = useParams<{ id: string }>();
-
   const normalizedProductId = id ? parseInt(id, 10) : null;
-
-  console.log("normalizedProductId", normalizedProductId);
-  console.log("productId", id);
 
   const dispatch = useAppDispatch();
   const product = useAppSelector(selectProduct);
   const isProductLoading = useAppSelector(selectIsProductLoading);
-  console.log("product", product);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(null);
@@ -32,19 +30,8 @@ const ProductDetails = () => {
     stockMap,
     availableColors,
     availableSizes,
-    availableSizesByColor,
-    availableColorsBySize,
     imageMap,
   } = useProductStock(product, selectedColorId, selectedSize);
-
-  console.log("stockMap", stockMap);
-
-  console.log("availableColors", availableColors);
-  console.log("availableSizes", availableSizes);
-
-  console.log("availableSizesByColor", availableSizesByColor);
-  console.log("availableColorsBySize", availableColorsBySize);
-
 
   useEffect(() => {
     if (!product) return;
@@ -61,7 +48,7 @@ const ProductDetails = () => {
   }, [product])
 
   if (!product) return <div>No product found</div>;
-  const { title, price, description } = product;
+  const {title, price, description} = product;
 
   const getStock = (colorId: number, size: ProductSize) =>
     stockMap.get(`${ colorId }_${ size }`) ?? 0;
@@ -140,14 +127,14 @@ const ProductDetails = () => {
     <section className="section section-product-details">
       { isProductLoading ? (<div className="container"><h1>Loading...</h1></div>) :
         (<div className="container">
-          <div className="grid grid-cols-10 gap-x-5">
-            <div className="col-span-6">
+          <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-x-4">
+            <div className="col-span-6 lg:col-span-6">
               <ProductDetailsCarousel
-                images={ imageMap.get(selectedColorId ?? 0)  ?? [] }
+                images={ imageMap.get(selectedColorId ?? 0) ?? [] }
                 outOfStock={ outOfStock }
               />
             </div>
-            <div className="col-span-2 flex flex-col">
+            <div className="col-span-3 lg:col-span-2 flex flex-col">
               <h2 className="product-title">{ title }</h2>
               <div className="flex">
                 { product.tags.map((tag) => {
@@ -157,18 +144,14 @@ const ProductDetails = () => {
 
               <p className="product-size-title">size:</p>
               <div className="product-btn-wrapper">
-                { outOfStock ? <div>OUT OF STOCK</div> : availableSizes.map((size) => {
-
-                  console.log("STOCK_MAP", stockMap.get(`${ selectedColorId }_${ size }`));
-
+                { outOfStock ? <div>OUT OF STOCK</div> : availableSizes.map((size, i) => {
                   return (
                     <button
-                      key={ size }
+                      key={ i }
                       className={ `product-btn-size ${
                         selectedSize === size ? "product-btn-size--active" : ""
                       } ${ isAvailableSizeByColor(size) ? "" : "product-btn-size--unavailable" }` }
                       onClick={ () => handleSizeChange(size) }
-                      // disabled={!isAvailableSizeByColor(size)}
                     >{ sizeToLabel(size) }</button>
                   )
                 }) }
@@ -191,21 +174,24 @@ const ProductDetails = () => {
                   )
                 }) }
               </div>
-
               <p className="product-price-title">price:</p>
               <p className="product-price">${ price }</p>
-              <button
-                disabled={ !selectedColorId || !selectedSize }
-                // onClick={ addItemToCart }
-                className={ `product-btn-add ${ (!selectedColorId || !selectedSize) ? "product-btn-add--disabled" : "" }` }
-              >
-                add
-                to
-                cart
-              </button>
-              <p className="product-description">
-                { description }
-              </p>
+              { isAuthenticated && (
+                <>
+                  <button
+                    disabled={ !selectedColorId || !selectedSize }
+                    // onClick={ addItemToCart }
+                    className={ `product-btn-add ${ (!selectedColorId || !selectedSize) ? "product-btn-add--disabled" : "" }` }
+                  >
+                    add to cart
+                  </button>
+                  <p className="product-description">{ description }</p>
+                </>
+              ) }
+
+              <div className="relative">
+                { !isAuthenticated && (<AuthenticationRequired variant={ 'inline' }/>) }
+              </div>
             </div>
           </div>
         </div>)

@@ -8,7 +8,7 @@
     }
 
     .actions-wrapper {
-        @apply flex gap-4 items-center;
+        @apply flex gap-3 items-center;
     }
 
     .nav {
