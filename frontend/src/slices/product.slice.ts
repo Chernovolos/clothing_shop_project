@@ -1,8 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { RootState } from "../app/store.ts";
-import { getProductById } from "@/pages/ProductDetails/product-details.api.ts";
-import { getProducts } from "@/pages/Product/product.api.ts";
 import type { ProductDetailsDto } from "@/types/dtos/product.dto.ts";
+import { getProducts } from "@/thunk/product.thunk.ts";
+import { getProductById } from "@/thunk/product-details.thunk.ts";
 
 interface ProductState {
   product:  ProductDetailsDto | null;
@@ -49,7 +49,7 @@ export const productSlice = createSlice({
       })
       .addCase(getProductById.rejected, (state, action) => {
         state.isProductLoading = false;
-        state.productError = action.error.message || "Something went wrong";
+        state.productError =  action.payload?.message || "Something went wrong";
       })
 
       //PRODUCTS
@@ -63,7 +63,7 @@ export const productSlice = createSlice({
       })
       .addCase(getProducts.rejected, (state, action) => {
         state.isProductsLoading = false;
-        state.productsError = action.error.message || "Something went wrong";
+        state.productsError = action.payload?.message || "Something went wrong";
       })
   },
 });

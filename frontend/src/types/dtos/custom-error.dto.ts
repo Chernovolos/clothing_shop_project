@@ -1,0 +1,1 @@
+export interface RejectValue { message: string; staus?: number  }

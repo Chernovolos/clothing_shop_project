@@ -1,36 +1,62 @@
 import { useParams } from "react-router";
-import { useNavigate } from "react-router-dom";
-import Basket from "../../public/images/icons/empty_basket.svg";
+import { Link } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import type { ProductDetailsDto } from "@/types/dtos/product.dto.ts";
+import { ShoppingCart } from "lucide-react";
+import AdHocStockSelector from "@/components/AdHocStockSelector.tsx";
 
 type Props = {
   product: ProductDetailsDto;
 };
 
 const ProductCard = ({product}: Props) => {
-  const { category } = useParams();
-  const navigate = useNavigate();
-  const imgURL = product.images?.[0]?.url;
+  const {category} = useParams();
+  const image = product.images.filter((img) => img.isPrimary);
+  const [isAdHocSelectorOpen, setAdHocSelectorOpen] = useState(false);
+  const adHocStockSelectorRef = useRef<HTMLDivElement | null>(null);
 
-  const handleClick = () => {
-    navigate(`/${ category }/${ product.id }`);
-  }
+  useEffect(() => {
+    const handleClickOutsideStock = (event: MouseEvent) => {
+      const target = event.target as Node;
+
+      if (isAdHocSelectorOpen && adHocStockSelectorRef.current && !adHocStockSelectorRef.current.contains(target)) {
+        setAdHocSelectorOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutsideStock);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideStock);
+    }
+  }, [isAdHocSelectorOpen]);
+
+  const closeAdHocSelector = () => setAdHocSelectorOpen(false);
 
   return (
-    <div onClick={ handleClick } className="card-container group">
-      <figure className="card-body">
+    <div className="card-container group">
+      <figure className="card-body relative" >
         <div className="card-image">
           <img
-            src={ imgURL }
+            src={ image[0].url }
             alt={ product.title }
           />
         </div>
-        <figcaption className="relative">
-          <button className="btn-card">
-            <img className="card-img-basket" src={ Basket } alt="Basket Image"/>
+        <figcaption  ref={ adHocStockSelectorRef }>
+          <button
+            onClick={ () => setAdHocSelectorOpen(prev => !prev) }
+            className="btn-card">
+            <ShoppingCart className="card-img-basket" strokeWidth={ 1 }/>
           </button>
-          <p className="card-title">{ product.title }</p>
-          <span className="card-price">{ product.price }</span>
+          <Link to={ `/${ category }/${ product.id }` } className="card-title">
+            { product.title }
+          </Link>
+          <AdHocStockSelector
+            product={ product }
+            isOpen={ isAdHocSelectorOpen }
+            onClose={ closeAdHocSelector }
+          />
+          <p className="card-price">{ product.price }</p>
         </figcaption>
       </figure>
     </div>

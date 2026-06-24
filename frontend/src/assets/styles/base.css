@@ -5,6 +5,8 @@
         line-height: 1.5;
         font-size: 1rem;
         letter-spacing: var(--tracking-wide);
+        scrollbar-gutter: stable both-edges;
+        scrollbar-color: transparent transparent;
     }
 
     body {
