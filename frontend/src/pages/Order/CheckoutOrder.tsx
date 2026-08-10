@@ -313,7 +313,7 @@ const CheckoutOrder = () => {
                               autoComplete="tel"
                               { ...register("userInput.phoneNumber", {
                                 required: "Phone number is required",
-                                setValueAs: (v) => v.replace(/[\s\-\(\)]/g, ""),
+                                setValueAs: (v) => v.replace(/[\s\-()]/g, ""),
                                 pattern: {
                                   value: /^(?:\+?38)?0\d{9}$/,
                                   message: "Invalid phone number",
@@ -574,7 +574,7 @@ const CheckoutOrder = () => {
                                     <div className="order-product__content">
                                       <div className="order-product__row">
                                         <h4 className="order-product__title">{ item.product.title }</h4>
-                                        <span className="order-product__price">{ item.product.price }</span>
+                                        <span className="order-product__price">{getCurrencySymbol()} { convertToCurrency(item.product.price) }</span>
                                       </div>
                                       <div className="order-product__details">
                                         <div className="order-product__meta">
