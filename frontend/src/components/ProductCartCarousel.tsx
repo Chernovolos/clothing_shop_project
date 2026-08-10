@@ -4,14 +4,14 @@ import {
   usePrevNextButtons,
 } from './EmblaCarouselArrowButtons';
 import useEmblaCarousel from 'embla-carousel-react'
+import type { ImageDto } from "@/types/dtos/image.dto.ts";
 
 type PropType = {
-  images: string[];
+  images: ImageDto[];
   outOfStock?: boolean;
 }
 
 const ProductCartCarousel = ({images = []}: PropType) => {
-  if (!images.length) return null;
   const [emblaRef, emblaApi] = useEmblaCarousel()
   const {
     prevBtnDisabled,
@@ -20,8 +20,10 @@ const ProductCartCarousel = ({images = []}: PropType) => {
     onNextButtonClick,
   } = usePrevNextButtons(emblaApi)
 
+  if (!images.length) return null;
+
   return (
-    <div className="embla relative">
+    <div className="embla relative flex-1 h-full">
       <PrevButton
         onClick={ onPrevButtonClick }
         disabled={ prevBtnDisabled }
@@ -30,11 +32,13 @@ const ProductCartCarousel = ({images = []}: PropType) => {
       <div className="embla__viewport" ref={ emblaRef }>
         <div className="embla__container">
           { images.map((img, i) => (
-            <div className="embla__slide" key={ i }>
+            <div
+              key={ i }
+              className="embla__slide">
               <img
-                src={ img }
+                src={ img.url }
                 alt={ `thumb-${ i }` }
-                className="w-full h-full object-cover"/>
+                className="object-cover w-full h-full"/>
             </div>
           )) }
         </div>

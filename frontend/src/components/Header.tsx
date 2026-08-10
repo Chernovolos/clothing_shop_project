@@ -1,16 +1,18 @@
 import { useState, useRef, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import Logo from "../../public/images/icons/logo_transparent.svg";
-import { useAppSelector } from "@/app/hooks.ts";
+import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
 import { Hamburger, LogIn, ShoppingCart, UserRound, X } from "lucide-react";
-import { selectOrder, selectTotalQuantity } from "@/slices/cart.slice.ts";
 import { selectIsAuthenticated } from "@/slices/user.slice.ts";
 import { useAuthModal } from "@/contexts/AuthModalContext";
 import CurrencySelect from "./CurrencySelect";
 import MiniCart from "@/components/MiniCart.tsx";
 import Profile from "@/components/Profile.tsx";
+import { clearOrderError, selectOrder } from "@/slices/order.slice.ts";
 
 const Header = () => {
+  const dispatch = useAppDispatch();
+
   const [isCartOpen, setCartOpen] = useState(false);
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isProfileOpen, setProfileOpen] = useState(false);
@@ -22,8 +24,7 @@ const Header = () => {
   const mobileMenuRef = useRef<HTMLDivElement | null>(null);
   const profileRef = useRef<HTMLDivElement | null>(null);
 
-  const order = useAppSelector(selectOrder);
-  const totalQuantity = useAppSelector(selectTotalQuantity);
+  const order = useAppSelector(selectOrder)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,9 +59,21 @@ const Header = () => {
     };
   }, [isMobileMenuOpen, isCartOpen, isProfileOpen]);
 
-  const closeCart = () => setCartOpen(false);
+
+  const closeCart = () => {
+    dispatch(clearOrderError());
+    setCartOpen(false)
+  };
   const closeMobileMenu = () => setMobileMenuOpen(false);
   const closeProfile = () => setProfileOpen(false);
+
+  const toggleCart = () => {
+    if (isCartOpen) {
+      dispatch(clearOrderError());
+    }
+
+    setCartOpen(prev => !prev);
+  };
 
   return (
     <section className="section">
@@ -109,10 +122,10 @@ const Header = () => {
                   <button
                     aria-label="Open basket"
                     className="btn-basket relative"
-                    onClick={ () => setCartOpen(prev => !prev) }
+                    onClick={ toggleCart }
                   >
                     <ShoppingCart color="#1D1F22" strokeWidth={ 1 } size={ 20 }/>
-                    { order ? <span className="badge">{ totalQuantity }</span> : "" }
+                    { order ? <span className="badge">{ order.quantity }</span> : "" }
                   </button>
                   <MiniCart
                     isOpen={ isCartOpen }

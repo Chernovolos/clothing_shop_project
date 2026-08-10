@@ -1,14 +1,10 @@
 import { type SubmitHandler, useForm } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
 import { createUser } from "@/thunk/user.thunk.ts";
-import {
-  clearError,
-  selectUserError,
-  selectUsesLoading,
-} from "@/slices/user.slice.ts";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { LogIn } from "lucide-react";
+import { clearError, selectUserError, selectUsesLoading } from "@/slices/user.slice.ts";
+import { useEffect, useState } from "react";
+import { Eye, EyeOff, LogIn, Mail } from "lucide-react";
+import { useAuthModal } from "@/contexts/AuthModalContext.tsx";
 
 interface Props {
   onSwitchToLogin: () => void;
@@ -23,10 +19,12 @@ interface RegisterFormProps {
 }
 
 const RegisterForm = ({onSwitchToLogin, onClose}: Props) => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isLoading = useAppSelector(selectUsesLoading);
   const userError = useAppSelector(selectUserError);
+
+  const { openLogin } = useAuthModal();
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -71,7 +69,7 @@ const RegisterForm = ({onSwitchToLogin, onClose}: Props) => {
     try {
       await dispatch(createUser(payload)).unwrap();
       onClose();
-      navigate("/women");
+      openLogin();
     } catch (error) {
       console.error(error);
     }
@@ -140,7 +138,12 @@ const RegisterForm = ({onSwitchToLogin, onClose}: Props) => {
                       message: "Invalid email address",
                     },
                   }) }
-                  className="form-control"
+                  className="form-control email-input"
+                />
+
+                <Mail
+                  size={18}
+                  className="email-icon"
                 />
               </div>
               { errors.email && <p className="error-text">{ errors.email.message }</p> }
@@ -166,8 +169,17 @@ const RegisterForm = ({onSwitchToLogin, onClose}: Props) => {
                     },
                   })
                   }
-                  className="form-control"
+                  className="form-control password-input"
                 />
+
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((prev) => !prev)}
+                  className="password-toggle"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  { showPassword ? <EyeOff size={18} /> : <Eye size={18} /> }
+                </button>
               </div>
               { errors.password && <p className="error-text">{ errors.password.message }</p> }
             </div>

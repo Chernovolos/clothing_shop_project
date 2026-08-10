@@ -1,1 +1,1 @@
-export interface RejectValue { message: string; staus?: number  }
+export interface RejectValue { message: string; status?: number  }

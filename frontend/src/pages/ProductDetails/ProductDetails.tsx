@@ -8,6 +8,9 @@ import { selectIsAuthenticated } from "@/slices/user.slice.ts";
 import AuthenticationRequired from "@/components/AuthenticationRequired.tsx";
 import ProductDetailsCarousel from "@/components/ProductDetailsCarousel.tsx";
 import { getProductById } from "@/thunk/product-details.thunk.ts";
+import type { CreateOrderItemDto } from "@/types/dtos/order-item.dto.ts";
+import { addOrderItem } from "@/thunk/order.thunk.ts";
+import { useCurrencyContext } from "@/contexts/CurrencyContext.tsx";
 
 const ProductDetails = () => {
   const {id} = useParams<{ id: string }>();
@@ -20,6 +23,8 @@ const ProductDetails = () => {
 
   const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(null);
+
+  const { getCurrencySymbol, convertToCurrency } = useCurrencyContext();
 
   useEffect(() => {
     if (!normalizedProductId) return;
@@ -38,7 +43,6 @@ const ProductDetails = () => {
 
     const firstAvailable = product.stocks.find((s) => s.available > 0);
     if (firstAvailable) {
-      // setSelectedSize(firstAvailable.productSize);
       setSelectedColorId(firstAvailable.color?.id ?? null);
     } else {
       setSelectedSize(null);
@@ -54,7 +58,6 @@ const ProductDetails = () => {
     stockMap.get(`${ colorId }_${ size }`) ?? 0;
 
   const isAvailableSizeByColor = (size: ProductSize) => {
-    console.log("SIZE", size);
     if (!selectedColorId) return true;
     return getStock(selectedColorId, size) > 0;
   };
@@ -103,24 +106,23 @@ const ProductDetails = () => {
     } else {
       setSelectedSize(null);
     }
-
-
   };
 
-  // const addItemToCart = () => {
-  //   if (!selectedColorId || !selectedSize) return;
-  //
-  //   const newItem: CartItem = {
-  //     id: product.id,
-  //     quantity: 1,
-  //     color: selectedColorId,
-  //     size: selectedSize,
-  //     price: product.price,
-  //   };
-  //   dispatch(createOrder(newItem));
-  // };
+  const addItemToCart = () => {
+    if(product && selectedSize && selectedColorId) {
+      const stock = product.stocks.find(s => s.productSize === selectedSize && s.color && s.color.id === selectedColorId);
+      if (stock) {
+        const newItem: CreateOrderItemDto = {
+          type: 0,
+          productId: product.id,
+          stockId: stock.id,
+          quantity: 1,
+        };
+        dispatch(addOrderItem(newItem));
+      }
+    }
+  };
 
-  // const currentQuantity = getStock(selectedColorId, selectedSize) > 0;
   const outOfStock = product.stocks.every((s) => s.available === 0);
 
   return (
@@ -160,7 +162,6 @@ const ProductDetails = () => {
               <p className="product-color-title">color:</p>
               <div className="product-btn-wrapper">
                 { availableColors.map((color) => {
-                  console.log("isAvailableColorBySize", isAvailableColorBySize(color.id));
                   return (
                     <button
                       key={ color.id }
@@ -175,12 +176,12 @@ const ProductDetails = () => {
                 }) }
               </div>
               <p className="product-price-title">price:</p>
-              <p className="product-price">${ price }</p>
+              <p className="product-price">{getCurrencySymbol()} { convertToCurrency(price) }</p>
               { isAuthenticated && (
                 <>
                   <button
                     disabled={ !selectedColorId || !selectedSize }
-                    // onClick={ addItemToCart }
+                    onClick={ addItemToCart }
                     className={ `product-btn-add ${ (!selectedColorId || !selectedSize) ? "product-btn-add--disabled" : "" }` }
                   >
                     add to cart

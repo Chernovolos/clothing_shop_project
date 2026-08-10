@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
-import { selectProducts, selectIsProductsLoading, resetProducts } from "@/slices/product.slice.ts";
+import { selectProducts, selectIsProductsLoading } from "@/slices/product.slice.ts";
 import { CATEGORY_MAP, PRODUCT_CATEGORY } from "@/types/enums/product.enums.ts";
 import { getProducts } from "@/thunk/product.thunk.ts";
 import ProductCard from "../../components/ProductCard.tsx";
 
 const Product: React.FC = () => {
-  const {category} = useParams<{ category: 'women' | 'men' | 'kids' }>();
+  const { category } = useParams<{ category: 'women' | 'men' | 'kids' }>();
 
   const dispatch = useAppDispatch();
   const products = useAppSelector(selectProducts);
@@ -23,10 +23,7 @@ const Product: React.FC = () => {
     dispatch(
       getProducts({categoryType: categoryId}),
     );
-    return () => {
-      dispatch(resetProducts())
-    }
-  }, [categoryId, dispatch])
+  }, [categoryId])
 
   return (
     <section id="welcome" className="section-product">

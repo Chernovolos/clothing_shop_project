@@ -2,6 +2,8 @@ import { LogOut, X } from "lucide-react";
 import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
 import { logoutUser } from "@/thunk/auth.thunk.ts";
 import { selectUser } from "@/slices/user.slice.ts";
+import { useNavigate } from "react-router-dom";
+import { clearOrder } from "@/slices/order.slice.ts";
 
 type Props = {
   isOpen: boolean,
@@ -9,11 +11,15 @@ type Props = {
 }
 const Profile = ({ isOpen, onClose }: Props) => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const user = useAppSelector(selectUser);
 
   const handleLogout  = () => {
     dispatch(logoutUser());
+    dispatch(clearOrder())
+
     onClose();
+    navigate("/women");
   }
   return (
     <>

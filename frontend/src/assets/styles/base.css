@@ -1,4 +1,12 @@
 @layer base {
+
+    ::selection {
+        background-color: var(--detail-medium-contrast);
+    }
+
+    ::-moz-selection {
+        background-color: var(--detail-medium-contrast);
+    }
     html {
         font-family: var(--font-raleway), sans-serif;
         font-style: normal;
@@ -57,5 +65,6 @@
 
     .section {
         position: relative;
+        @apply mt-42;
     }
 }
