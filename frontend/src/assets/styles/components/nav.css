@@ -76,6 +76,7 @@
         height: 1.5rem;
         padding-left: 0.25rem;
         padding-right: 0.25rem;
+        /*padding-bottom: 0.25rem;*/
 
         display: flex;
         align-items: center;
@@ -89,6 +90,7 @@
         font-weight: 700;
 
         pointer-events: none;
+        line-height: 1;
     }
 
     .btn-basket {

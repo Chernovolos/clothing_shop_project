@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import type { ProductDetailsDto } from "@/types/dtos/product.dto.ts";
 import { ShoppingCart } from "lucide-react";
 import AdHocStockSelector from "@/components/AdHocStockSelector.tsx";
+import { useCurrencyContext } from "@/contexts/CurrencyContext.tsx";
 
 type Props = {
   product: ProductDetailsDto;
@@ -14,6 +15,8 @@ const ProductCard = ({product}: Props) => {
   const image = product.images.filter((img) => img.isPrimary);
   const [isAdHocSelectorOpen, setAdHocSelectorOpen] = useState(false);
   const adHocStockSelectorRef = useRef<HTMLDivElement | null>(null);
+
+  const { convertToCurrency, getCurrencySymbol } = useCurrencyContext();
 
   useEffect(() => {
     const handleClickOutsideStock = (event: MouseEvent) => {
@@ -56,7 +59,7 @@ const ProductCard = ({product}: Props) => {
             isOpen={ isAdHocSelectorOpen }
             onClose={ closeAdHocSelector }
           />
-          <p className="card-price">{ product.price }</p>
+          <p className="card-price">{ getCurrencySymbol()} { convertToCurrency(product.price) }</p>
         </figcaption>
       </figure>
     </div>

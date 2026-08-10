@@ -2,6 +2,8 @@ import axios, { type AxiosInstance } from "axios";
 import { type ProductDetailsDto, type ProductFilterDto } from "@/types/dtos/product.dto.ts";
 import type { CreateUserDto, UserDto, UserLoginDto } from "@/types/dtos/user.dto.ts";
 import type { AuthResponseDto } from "@/types/dtos/auth.dto.ts";
+import type { CheckoutOrderDto, OrderDto } from "@/types/dtos/order.dto.ts";
+import type { CreateOrderItemDto, UpdateOrderItemDto } from "@/types/dtos/order-item.dto.ts";
 
 class ApiService {
   private static _api: AxiosInstance | null = null;
@@ -58,6 +60,31 @@ class ApiService {
 
   public async login(user: UserLoginDto): Promise<AuthResponseDto> {
     const result = await ApiService.api.post<AuthResponseDto>(`/auth/login`, user)
+    return result.data;
+  }
+
+  public async getOrCreateOrder(): Promise<OrderDto> {
+    const result = await ApiService.api.get<OrderDto>(`/orders/order`)
+    return result.data;
+  }
+
+  public async addOrderItem(orderItem: CreateOrderItemDto): Promise<OrderDto> {
+    const result = await ApiService.api.post<OrderDto>(`/orders/order-item/add`, orderItem)
+    return result.data;
+  }
+
+  public async updateOrder(newOrder: UpdateOrderItemDto): Promise<OrderDto> {
+    const result = await ApiService.api.put<OrderDto>(`/orders/order-item/update/${ newOrder.id }`, newOrder)
+    return result.data;
+  }
+
+  public async removeOrderItem(id: number): Promise<OrderDto> {
+    const result = await ApiService.api.delete(`/orders/order-item/delete/${id}`)
+    return result.data;
+  }
+
+  public async checkOutOrder(order: CheckoutOrderDto):Promise<OrderDto> {
+    const result = await ApiService.api.put<OrderDto>(`/orders/order/checkout`, order)
     return result.data;
   }
 }

@@ -1,10 +1,12 @@
-import type { ProductDetailsDto } from "@/types/dtos/product.dto.ts";
-import { sizeToLabel } from "@/types/enums/product.enums.ts";
-import { useProductVariant } from "@/hooks/useProductVariant.ts";
 import { X } from "lucide-react";
-import { useAppSelector } from "@/app/hooks.ts";
+import { sizeToLabel } from "@/types/enums/product.enums.ts";
+import type { CreateOrderItemDto } from "@/types/dtos/order-item.dto.ts";
+import type { ProductDetailsDto } from "@/types/dtos/product.dto.ts";
+import { useProductVariant } from "@/hooks/useProductVariant.ts";
+import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
 import { selectIsAuthenticated } from "@/slices/user.slice.ts";
 import AuthenticationRequired from "@/components/AuthenticationRequired.tsx";
+import { addOrderItem } from "@/thunk/order.thunk.ts";
 
 type Props = {
   product: ProductDetailsDto;
@@ -13,8 +15,8 @@ type Props = {
 };
 
 const AdHocStockSelector = ({product, isOpen, onClose}: Props) => {
+  const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-
   const {
     colors,
     sizes,
@@ -27,6 +29,21 @@ const AdHocStockSelector = ({product, isOpen, onClose}: Props) => {
     isOutOfStock,
     isSelectionComplete,
   } = useProductVariant(product);
+
+  const addItemToCart = () => {
+    if (product && selectedSize && selectedColorId) {
+      const stock = product.stocks.find(s => s.productSize === selectedSize && s.color && s.color.id === selectedColorId);
+      if (stock) {
+        const newItem: CreateOrderItemDto = {
+          type: 0,
+          productId: product.id,
+          stockId: stock.id,
+          quantity: 1,
+        };
+        dispatch(addOrderItem(newItem));
+      }
+    }
+  };
 
   return (
     <>
@@ -76,7 +93,7 @@ const AdHocStockSelector = ({product, isOpen, onClose}: Props) => {
                   </div>
                   <button
                     disabled={ !isSelectionComplete || isOutOfStock }
-                    // onClick={ addItemToCart }
+                    onClick={ addItemToCart }
                     className={ `product-btn-add ${ (!isSelectionComplete || isOutOfStock) ? "product-btn-add--disabled" : "" }` }
                   >
                     add to cart

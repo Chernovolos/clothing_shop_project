@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import ArrowD from "../../public/images/icons/down_arrow.svg";
 import ArrowU from "../../public/images/icons/up_arrow.svg";
+import { useCurrencyContext } from "@/contexts/CurrencyContext.tsx";
 
 type Currency = "USD" | "EUR" | "JPY";
 
@@ -22,6 +23,8 @@ const CurrencySelect: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<Option>(options[0]);
   const ref = React.useRef<HTMLDivElement>(null);
 
+  const { setCurrency } = useCurrencyContext();
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (!ref.current) return;
@@ -37,6 +40,12 @@ const CurrencySelect: React.FC = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const handleClick = (option: Option) => {
+    setCurrency(option.value)
+    setSelectedOption(option);
+    setIsOpen(false);
+  }
 
   return (
     <div ref={ref} className="currency-select-wrapper">
@@ -56,10 +65,7 @@ const CurrencySelect: React.FC = () => {
               className="currency-dropdown-item"
               key={option.id}
               value={option.value}
-              onClick={() => {
-                setSelectedOption(option);
-                setIsOpen(false);
-              }}
+              onClick={() => {handleClick(option)}}
             >
               <span className="currensy-text">{option.icon}</span>
               <span className="currensy-text">{option.value}</span>

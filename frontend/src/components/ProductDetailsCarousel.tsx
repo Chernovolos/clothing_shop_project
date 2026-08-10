@@ -81,7 +81,10 @@ const ProductDetailsCarousel = ({images = [], outOfStock }: Props) => {
               className={ `relative min-w-full h-130 flex items-center justify-center text-4xl font-bold bg-gray-200 border-2 border-gray-700
                 ${ outOfStock ? "opacity-45" : "" } ` }
             >
-              <img src={ img.url } alt={ `thumb-${ i }` } className="object-cover w-full h-full"/>
+              <img
+                src={ img.url }
+                alt={ `thumb-${ i }` }
+                className="object-cover w-full h-full"/>
               { outOfStock && (
                 <div className="absolute flex items-center justify-center">
                   <span className="out-of-stock-main-title">

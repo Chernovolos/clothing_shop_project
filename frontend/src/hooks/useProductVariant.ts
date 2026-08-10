@@ -2,10 +2,17 @@ import type { ProductDetailsDto } from "@/types/dtos/product.dto.ts";
 import { useState } from "react";
 import type { ProductSize } from "@/types/enums/product.enums.ts";
 import { useProductStock2 } from "@/hooks/useProductStock2.ts";
+import type { StockDto } from "@/types/dtos/stock.dto.ts";
 
-export const useProductVariant = (product: ProductDetailsDto | null) => {
-  const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
-  const [selectedSize, setSelectedSize] = useState<ProductSize | null>(null);
+export const useProductVariant = (
+  product: ProductDetailsDto,
+  initialStock?: StockDto
+) => {
+  const [selectedColorId, setSelectedColorId] = useState<number | null>(
+    initialStock?.color?.id ?? null);
+  const [selectedSize, setSelectedSize] = useState<ProductSize | null>(
+    initialStock?.productSize ?? null
+  );
 
   const {
     stockMap,

@@ -1,14 +1,10 @@
-import { type SubmitHandler, useForm } from "react-hook-form";
-import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
-import {
-  clearError,
-  selectAuthLoading,
-  selectAuthError,
-} from "@/slices/user.slice.ts";
-import { login } from "@/thunk/auth.thunk.ts";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { UserRoundPlus } from "lucide-react";
+import { type SubmitHandler, useForm } from "react-hook-form";
+import { Eye, EyeOff, Mail, UserRoundPlus } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
+import { clearError, selectAuthLoading, selectAuthError } from "@/slices/user.slice.ts";
+import { login } from "@/thunk/auth.thunk.ts";
 
 interface Props {
   onSwitchToRegister: () => void;
@@ -26,6 +22,7 @@ const LoginForm = ({onSwitchToRegister, onClose}: Props) => {
 
   const authLoading = useAppSelector(selectAuthLoading);
   const authError = useAppSelector(selectAuthError);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -49,8 +46,9 @@ const LoginForm = ({onSwitchToRegister, onClose}: Props) => {
     },
   });
 
-  const getFieldState = (field: keyof LoginFormProps) => {
+  const getFieldFormState = (field: keyof LoginFormProps) => {
     if (errors[field]) return "is-error";
+    console.log("field", field);
 
     if (touchedFields[field] && dirtyFields[field]) {
       return "is-success";
@@ -85,7 +83,7 @@ const LoginForm = ({onSwitchToRegister, onClose}: Props) => {
           <div className="form-group">
             <div className="input-group">
               <label htmlFor="email">Email</label>
-              <div className={ `input-wrapper ${ getFieldState("email") }` }>
+              <div className={ `input-wrapper ${ getFieldFormState("email") }` }>
                 <input
                   id="email"
                   type="email"
@@ -98,7 +96,12 @@ const LoginForm = ({onSwitchToRegister, onClose}: Props) => {
                       message: "Invalid email address",
                     },
                   }) }
-                  className="form-control"
+                  className="form-control email-input"
+                />
+
+                <Mail
+                  size={ 18 }
+                  className="email-icon"
                 />
               </div>
               { errors.email && <p className="error-text">{ errors.email.message }</p> }
@@ -106,10 +109,10 @@ const LoginForm = ({onSwitchToRegister, onClose}: Props) => {
 
             <div className="input-group">
               <label htmlFor="password">password</label>
-              <div className={ `input-wrapper ${ getFieldState("password") }` }>
+              <div className={ `input-wrapper ${ getFieldFormState("password") }  relative` }>
                 <input
                   id="password"
-                  type="password"
+                  type={ showPassword ? "text" : "password" }
                   placeholder="1245_ddweR"
                   autoComplete="current-password"
                   { ...register("password", {
@@ -124,9 +127,19 @@ const LoginForm = ({onSwitchToRegister, onClose}: Props) => {
                     },
                   })
                   }
-                  className="form-control"
+                  className="form-control password-input"
                 />
+
+                <button
+                  type="button"
+                  onClick={ () => setShowPassword((prev) => !prev) }
+                  className="password-toggle"
+                  aria-label={ showPassword ? "Hide password" : "Show password" }
+                >
+                  { showPassword ? <EyeOff size={ 18 }/> : <Eye size={ 18 }/> }
+                </button>
               </div>
+
               { errors.password && <p className="error-text">{ errors.password.message }</p> }
             </div>
 
