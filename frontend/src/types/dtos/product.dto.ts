@@ -30,8 +30,9 @@ export interface ProductDetailsDto {
 
 export interface ProductFilterDto {
   categoryType?: ProductCategory;
-  type?: ProductType;
-  subType?: ProductSubType;
-  price?: number;
+  type?: ProductType[];
+  subType?: ProductSubType[];
   tags?: number[];
+  maxPrice?: number,
+  minPrice?: number,
 }

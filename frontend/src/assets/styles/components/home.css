@@ -1,0 +1,45 @@
+@layer components {
+    .section-home {
+        margin-top: 150px;
+        min-height: calc(100vh - 150px);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .home {
+        background: var(--color-bg);
+    }
+
+    .home-container {
+
+    }
+    .home-title {
+        font-size: 2.5em;
+        font-weight: 300;
+        letter-spacing: 0.02em;
+        text-transform: capitalize;
+        color: var(--color-text);
+        margin-bottom: 15px;
+    }
+
+    .btn-home {
+        font-size: 0.75em;
+        text-transform: uppercase;
+        color: var(--color-text-light);
+        background-color: var(--color-button);
+        border: 1px solid var(--color-button);
+        padding: 10px 25px;
+        width: 100%;
+        transition: transform 0.15s ease;
+        cursor: pointer;
+    }
+
+    .btn-home:hover {
+        color: var(--color-text);
+        background-color: transparent;
+        border: 1px solid var(--color-bg-dark);
+        transform: scale(0.97);
+    }
+}

@@ -14,3 +14,5 @@
 @import "./components/authentication-required.css";
 @import "./components/profile.css";
 @import "./components/order-list.css";
+@import "./components/product-filter.css";
+@import "./components/home.css";

@@ -5,7 +5,7 @@
 
     .product-category-title {
         @apply text-5xl font-extralight;
-        @apply pb-10 sm:mt-10 md:pb-15 lg:pb-20;
+        /*@apply pb-10 sm:mt-10 md:pb-15 lg:pb-20;*/
         letter-spacing: 0.02em;
         text-transform: capitalize;
     }
