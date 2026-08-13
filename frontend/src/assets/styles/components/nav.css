@@ -7,6 +7,10 @@
         z-index: 998;
     }
 
+    .section-header {
+        margin-top: 120px;
+    }
+
     .actions-wrapper {
         @apply flex gap-3 items-center;
     }

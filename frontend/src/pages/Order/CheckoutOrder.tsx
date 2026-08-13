@@ -222,7 +222,7 @@ const CheckoutOrder = () => {
   }
 
   return (
-    <div className="section">
+    <div className="section mt-42">
       <div className="container">
         <div className="grid min-h-screen">
           {
