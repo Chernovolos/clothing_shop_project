@@ -4,6 +4,9 @@ import type { CreateUserDto, UserDto, UserLoginDto } from "@/types/dtos/user.dto
 import type { AuthResponseDto } from "@/types/dtos/auth.dto.ts";
 import type { CheckoutOrderDto, OrderDto } from "@/types/dtos/order.dto.ts";
 import type { CreateOrderItemDto, UpdateOrderItemDto } from "@/types/dtos/order-item.dto.ts";
+import type { TagDto, TagFilterDto } from "@/types/dtos/tag.dto.ts";
+import type { ColorDto, ColorFilterDto } from "@/types/dtos/color.dto.ts";
+import type { ProductSize } from "@/types/enums/product.enums.ts";
 
 class ApiService {
   private static _api: AxiosInstance | null = null;
@@ -85,6 +88,21 @@ class ApiService {
 
   public async checkOutOrder(order: CheckoutOrderDto):Promise<OrderDto> {
     const result = await ApiService.api.put<OrderDto>(`/orders/order/checkout`, order)
+    return result.data;
+  }
+
+  public async filterTags(filter: TagFilterDto): Promise<TagDto[]> {
+    const result = await ApiService.api.post<TagDto[]>(`/tags/filter`, filter)
+    return result.data;
+  }
+
+  public async filterColors(filter: ColorFilterDto): Promise<ColorDto[]> {
+    const result = await ApiService.api.post<ColorDto[]>(`/colors/filter`, filter)
+    return result.data;
+  }
+
+  public async filterSizes(filter: ProductFilterDto): Promise<ProductSize[]> {
+    const result = await ApiService.api.post<ProductSize[]>(`/stock/filter`, filter)
     return result.data;
   }
 }

@@ -39,7 +39,7 @@ export const useProductStock = (
 
       colorsMap.set(colorId, color);
 
-      if (size !== 0) {
+      if (size !== null) {
         sizesSet.add(size);
       }
 
@@ -74,7 +74,7 @@ export const useProductStock = (
         ? Array.from(sizeByColor.get(selectedColorId) ?? [])
         : Array.from(sizesSet),
 
-      availableColorsBySize: selectedSize
+      availableColorsBySize: selectedSize !== null
         ? Array.from(colorBySize.get(selectedSize) ?? [])
           .map((id) => colorsMap.get(id)!)
           .filter(Boolean)

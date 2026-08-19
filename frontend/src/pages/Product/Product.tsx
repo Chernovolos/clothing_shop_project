@@ -7,14 +7,19 @@ import {
   selectProductChips,
   selectHasProductsLoaded, selectLoadedCategory, clearAllProductChips, selectProductFilter,
 } from "@/slices/product.slice.ts";
-import { CATEGORY_MAP, PRODUCT_CATEGORY, type ProductCategory } from "@/types/enums/product.enums.ts";
+import {
+  CATEGORY_MAP,
+  PRODUCT_CATEGORY,
+  type ProductCategory,
+  productTypeOptions,
+} from "@/types/enums/product.enums.ts";
 import { getProducts } from "@/thunk/product.thunk.ts";
 import ProductCard from "../../components/ProductCard.tsx";
 import ProductFilterMenu from "@/components/ProductFilter/ProductFilterMenu.tsx";
 import ProductFilterChips from "@/components/ProductFilter/ProductFilterChips.tsx";
 
 const Product: React.FC = () => {
-  const { category } = useParams<{ category: 'women' | 'men' | 'kids' }>();
+  const {category} = useParams<{ category: 'women' | 'men' | 'kids' }>();
 
   const dispatch = useAppDispatch();
   const products = useAppSelector(selectProducts);
@@ -23,7 +28,11 @@ const Product: React.FC = () => {
   const hasProductsLoaded = useAppSelector(selectHasProductsLoaded);
   const loadedCategory = useAppSelector(selectLoadedCategory);
   const productFilter = useAppSelector(selectProductFilter);
+  console.log("productFilter", productFilter);
+  console.log("productFilter", productFilter);
 
+  const productTypeOption = productTypeOptions.find((option) => option.value === productFilter?.type)
+  const title = productTypeOption?.label || ''
   const normalized = category?.toLowerCase().trim();
   const categoryId: ProductCategory =
     normalized && normalized in CATEGORY_MAP
@@ -44,10 +53,25 @@ const Product: React.FC = () => {
     <section id="welcome" className="section-product">
       <div className="container">
         <div
-          className=" pb-10 sm:mt-10 md:pb-15 lg:pb-20 grid base:grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-x-2 gap-y-3 lg:gap-x-2 lg:gap-y-2">
-          <h1 className="product-category-title">Category name</h1>
-          <ProductFilterMenu/>
-          <div className="col-span-2">
+          className=" grid
+                      items-center
+                      grid-cols-1
+                      gap-y-3
+                      pb-10
+                      sm:mt-10
+                      md:pb-15
+                      lg:pb-10
+                      lg:grid-cols-2
+                      lg:gap-x-2
+                      lg:gap-y-2"
+        >
+          <div className="col-span-1">
+            <h1 className="product-category-title">{ title }</h1>
+          </div>
+          <div className="col-span-1">
+            <ProductFilterMenu/>
+          </div>
+          <div className="col-span-1 lg:col-span-2">
             <ProductFilterChips
               chips={ chips }
               productFilter={ productFilter }
