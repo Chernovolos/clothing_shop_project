@@ -63,7 +63,7 @@ const ProductDetails = () => {
   };
 
   const isAvailableColorBySize = (color: number) => {
-    if (!selectedSize) return true;
+    if (selectedSize === null) return true;
 
     return getStock(color, selectedSize) > 0;
   };
@@ -91,7 +91,7 @@ const ProductDetails = () => {
   const handleColorChange = (colorId: number) => {
     setSelectedColorId(colorId);
 
-    if (!selectedSize) return;
+    if (selectedSize === null) return;
 
     const currentStock = getStock(colorId, selectedSize);
 
@@ -109,7 +109,7 @@ const ProductDetails = () => {
   };
 
   const addItemToCart = () => {
-    if(product && selectedSize && selectedColorId) {
+    if(product && selectedSize !== null && selectedColorId) {
       const stock = product.stocks.find(s => s.productSize === selectedSize && s.color && s.color.id === selectedColorId);
       if (stock) {
         const newItem: CreateOrderItemDto = {
@@ -146,7 +146,8 @@ const ProductDetails = () => {
 
               <p className="product-size-title">size:</p>
               <div className="product-btn-wrapper">
-                { outOfStock ? <div>OUT OF STOCK</div> : availableSizes.map((size, i) => {
+                { outOfStock ? <div>OUT OF STOCK</div> :
+                  availableSizes.map((size, i) => {
                   return (
                     <button
                       key={ i }
@@ -180,9 +181,9 @@ const ProductDetails = () => {
               { isAuthenticated && (
                 <>
                   <button
-                    disabled={ !selectedColorId || !selectedSize }
+                    disabled={ !selectedColorId || selectedSize === null }
                     onClick={ addItemToCart }
-                    className={ `product-btn-add ${ (!selectedColorId || !selectedSize) ? "product-btn-add--disabled" : "" }` }
+                    className={ `product-btn-add ${ (!selectedColorId || selectedSize === null) ? "product-btn-add--disabled" : "" }` }
                   >
                     add to cart
                   </button>

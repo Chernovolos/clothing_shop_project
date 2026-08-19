@@ -13,6 +13,7 @@ type Props = {
 const ProductCard = ({product}: Props) => {
   const {category} = useParams();
   const image = product.images.filter((img) => img.isPrimary);
+  // console.log("product",product);
   const [isAdHocSelectorOpen, setAdHocSelectorOpen] = useState(false);
   const adHocStockSelectorRef = useRef<HTMLDivElement | null>(null);
 

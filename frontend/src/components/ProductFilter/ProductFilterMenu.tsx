@@ -3,36 +3,88 @@ import {
   type ProductType,
   productTypeOptions,
   productSubTypeOptions,
-  productTagsOptions, CATEGORY_MAP, PRODUCT_CATEGORY,
+  CATEGORY_MAP, PRODUCT_CATEGORY, PRODUCT_TYPE, PRODUCT_SIZE_LABEL, type ProductSize,
 } from "@/types/enums/product.enums.ts";
 import { useEffect, useRef, useState } from "react";
-import { ChevronUp, Menu, X } from "lucide-react";
-import { type SubmitHandler, useForm, Controller } from "react-hook-form";
+import { Menu, X } from "lucide-react";
+import { type SubmitHandler, useForm, Controller, useWatch } from "react-hook-form";
 import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
-import { selectProductChips, setProductChips, setProductFilter } from "@/slices/product.slice.ts";
+import {
+  selectColorsFilter,
+  selectLoadedCategory,
+  selectProductChips, selectSizesFilter,
+  selectTagsFilter,
+  setProductChips,
+  setProductFilter,
+} from "@/slices/product.slice.ts";
 import { useParams } from "react-router";
 import { getProducts } from "@/thunk/product.thunk.ts";
 import type { ProductFilterDto } from "@/types/dtos/product.dto.ts";
+import { getFilterColors, getFilterSizes, getFilterTags } from "@/thunk/product-filter.thunk.ts";
+import FilterCategory from "@/components/ProductFilter/FilterCategory.tsx";
 
-interface ProductFilterForm {
-  productType: ProductType[],
+interface ProductFilterFieldValues {
+  productType: ProductType,
   subType: ProductSubType[],
   productTag: number[],
-  minPrice: number,
-  maxPrice: number,
+  productColor: number[],
+  productSize: ProductSize[],
+  minPrice?: number,
+  maxPrice?: number,
 }
 
-export type ProductFilterChip = {
-  type: "productType" | "subType" | "productTag" | "maxPrice" | "minPrice";
-  value: number | string;
-  label: string;
-};
+export type ProductFilterChip =
+  | { type: "productType"; value: ProductType; label: string }
+  | { type: "subType"; value: ProductSubType; label: string }
+  | { type: "productTag"; value: number; label: string }
+  | { type: "productColor"; value: number; hex: string }
+  | { type: "productSize"; value: ProductSize; label: string }
+  | { type: "price"; value: "price"; minPrice?: number; maxPrice?: number };
 
+
+type FilterSection =
+  "productFilter"
+  | "productType"
+  | "productSubType"
+  | "productTag"
+  | "productColor"
+  | "productSize"
+  | "productPrice";
 const MIN_PRICE_LIMIT = 0;
-const MAX_PRICE_LIMIT = 999999.99;
+const MAX_PRICE_LIMIT = 20000;
+
+const chipsOfType = <T extends ProductFilterChip["type"]>(
+  chips: ProductFilterChip[],
+  type: T,
+): Extract<ProductFilterChip, { type: T }>[] => {
+  return chips.filter(
+    (chip): chip is Extract<ProductFilterChip, { type: T }> => chip.type === type,
+  )
+}
+
+const normalizeChips = <T, V>(
+  values: V[],
+  source: T[] | null | undefined,
+  match: (item: T, value: V) => boolean,
+  toChip: (item: T) => ProductFilterChip,
+): ProductFilterChip[] => {
+  return values
+    .map((value) => {
+      if (!source) return undefined;
+
+      const item = source.find((item) => match(item, value))
+      return item ? toChip(item) : undefined
+    })
+    .filter((chip) => chip !== undefined)
+}
 
 const ProductFilterMenu = () => {
   const dispatch = useAppDispatch();
+  const tagsFilter = useAppSelector(selectTagsFilter);
+  const colorsFilter = useAppSelector(selectColorsFilter);
+  const sizesFilter = useAppSelector(selectSizesFilter);
+  const loadedCategory = useAppSelector(selectLoadedCategory);
+  const chips = useAppSelector(selectProductChips);
 
   const {category} = useParams<{ category: 'women' | 'men' | 'kids' }>();
   const normalized = category?.toLowerCase().trim();
@@ -41,163 +93,241 @@ const ProductFilterMenu = () => {
       ? CATEGORY_MAP[normalized as keyof typeof CATEGORY_MAP]
       : PRODUCT_CATEGORY.DEFAULT;
 
-  const [isToggle, setIsToggle] = useState<boolean>(false);
-  const [isProductTypeOpen, setIsProductTypeOpen] = useState(false);
-  const [isProductSubTypeOpen, setIsProductSubTypeOpen] = useState(false);
-  const [isProductTagOpen, setIsProductTagOpen] = useState(false);
-  const [isPriceOpen, setIsPriceOpen] = useState(false);
-
-  const chips = useAppSelector(selectProductChips);
-
   const filterProductRef = useRef<HTMLDivElement>(null);
 
-  const toggle = () => {
-    setIsToggle((isToggle: boolean) => !isToggle)
-  };
+  const [openSection, setOpenSections] = useState<Record<FilterSection, boolean>>({
+    productFilter: false,
+    productType: false,
+    productSubType: false,
+    productTag: false,
+    productSize: false,
+    productColor: false,
+    productPrice: false,
+  })
 
-  const toggleProductType = () => {
-    setIsProductTypeOpen((prev) => !prev);
-  };
-
-  const toggleProductSubType = () => {
-    setIsProductSubTypeOpen((prev) => !prev);
-  }
-
-  const toggleProductTag = () => {
-    setIsProductTagOpen((prev) => !prev);
-  }
-
-  const togglePrice = () => {
-    setIsPriceOpen((prev) => !prev);
+  const toggleSection = (section: FilterSection) => {
+    setOpenSections((prev) => ({...prev, [section]: !prev[section]}));
   }
 
   const {
     control, register,
     handleSubmit,
     setValue,
-    formState: {errors}
-  } = useForm<ProductFilterForm>({
+    formState: {errors},
+  } = useForm<ProductFilterFieldValues>({
     mode: "onChange",
     defaultValues: {
-      productType: [],
+      productType: 0,
       subType: [],
       productTag: [],
-      minPrice: MIN_PRICE_LIMIT,
-      maxPrice: MAX_PRICE_LIMIT,
+      productColor: [],
+      productSize: [],
+      minPrice: undefined,
+      maxPrice: undefined,
     },
   })
 
-  const onSubmit: SubmitHandler<ProductFilterForm> = (data) => {
-    const productTypeChips: ProductFilterChip[] = data.productType
-      .map((value) => {
-        const option = productTypeOptions.find(
-          (option) => option.value === value,
-        );
+  const productType = useWatch({
+    control,
+    name: "productType",
+  })
+  const productSubType = useWatch({
+    control,
+    name: "subType",
+  })
+  const productTag = useWatch({
+    control,
+    name: "productTag",
+  })
+  const productColor = useWatch({
+    control,
+    name: "productColor",
+  })
+  const productSize = useWatch({
+    control,
+    name: "productSize",
+  })
+  const minPrice = useWatch({
+    control,
+    name: "minPrice",
+  })
+  const maxPrice = useWatch({
+    control,
+    name: "maxPrice",
+  })
 
-        if (!option) return undefined;
-
-        return {
-          type: "productType" as const,
-          value: option.value,
-          label: option.label,
-        };
-      }).filter((value) => value !== undefined);
-
-    const subTypeChips: ProductFilterChip[] = data.subType
-      .map((value) => {
-        const option = productSubTypeOptions.find((option) => option.value === value)
-
-        if (!option) return undefined
-
-        return {
-          type: "subType" as const,
-          value: option.value,
-          label: option.label,
-        }
-      }).filter((value) => value !== undefined)
-
-    const productTagChips: ProductFilterChip[] = data.productTag
-      .map((value) => {
-        const option = productTagsOptions.find((option) => option.value === value)
-        if (!option) return undefined
-
-        return {
-          type: "productTag" as const,
-          value: option.value,
-          label: option.label,
-        }
-
-      }).filter((value) => value !== undefined)
-
-    dispatch(setProductFilter({
+  const buildBaseFilter = () => ({
+    ...(categoryId !== PRODUCT_CATEGORY.DEFAULT && {
       categoryType: categoryId,
-      type: data.productType,
-      subType: data.subType,
-      tags: data.productTag,
-      maxPrice: data.maxPrice,
-      minPrice: data.minPrice,
-    }))
+    }),
+    ...(productType !== PRODUCT_TYPE.DEFAULT && {
+      type: productType,
+    }),
+    ...((productSubType?.length ?? 0) > 0 && {
+      subType: productSubType,
+    }),
+    ...(minPrice !== undefined && {
+      minPrice: minPrice,
+    }),
+    ...(maxPrice !== undefined && {
+      maxPrice: maxPrice,
+    }),
+  })
 
-    dispatch(setProductChips([
-      ...productTypeChips,
-      ...subTypeChips,
-      ...productTagChips,
-    ]))
+  const onSubmit: SubmitHandler<ProductFilterFieldValues> = (data) => {
+    const productTypeOption = productTypeOptions.find(
+      (option) => option.value === data.productType,
+    );
 
-    const productFilterDto: ProductFilterDto = {
-      categoryType: categoryId,
-      type: data.productType,
-      subType: data.subType,
-      tags: data.productTag,
-      maxPrice: data.maxPrice,
-      minPrice: data.minPrice,
+    let productTypeChip: ProductFilterChip | null = null;
+    let priceChip: ProductFilterChip | null = null;
+
+    if (data.productType !== PRODUCT_TYPE.DEFAULT) {
+      productTypeChip = {
+        type: "productType",
+        value: data.productType,
+        label: productTypeOption?.label ?? "",
+      }
     }
 
+    const subTypeChips: ProductFilterChip[] = normalizeChips(
+      data.subType,
+      productSubTypeOptions,
+      (option, value) => option?.value === value,
+      (option) => ({type: "subType", value: option.value, label: option.label}),
+    )
+
+    const productTagChips: ProductFilterChip[] = normalizeChips(
+      data.productTag,
+      tagsFilter,
+      (tag, id) => tag?.id === id,
+      (tag) => ({type: "productTag", value: tag.id, label: tag.title}),
+    )
+
+    const productColorChips: ProductFilterChip[] = normalizeChips(
+      data.productColor,
+      colorsFilter,
+      (color, id) => color?.id === id,
+      (color) => ({type: "productColor", value: color.id, hex: color.hex}),
+    )
+
+    const productSizeChips: ProductFilterChip[] = data.productSize
+      .filter((size) => sizesFilter?.includes(size))
+      .map((size) => ({
+        type: "productSize" as const,
+        value: size,
+        label: PRODUCT_SIZE_LABEL[size],
+      }));
+
+    const productFilterDto: ProductFilterDto = {
+      ...buildBaseFilter(),
+      ...(data.productTag.length > 0 && {
+        tags: data.productTag,
+      }),
+      ...(data.productColor.length > 0 && {
+        colors: data.productColor,
+      }),
+      ...(data.productSize.length > 0 && {
+        sizes: data.productSize,
+      }),
+    }
+
+    if (data.minPrice !== undefined || data.maxPrice !== undefined) {
+      priceChip = {
+        type: "price",
+        value: "price",
+        minPrice: data.minPrice,
+        maxPrice: data.maxPrice,
+      }
+    }
+
+    dispatch(setProductFilter({...productFilterDto}))
+    dispatch(setProductChips([
+      ...(productTypeChip ? [productTypeChip] : []),
+      ...(priceChip ? [priceChip] : []),
+      ...subTypeChips,
+      ...productTagChips,
+      ...productColorChips,
+      ...productSizeChips,
+    ]))
     dispatch(getProducts({...productFilterDto}))
-
-
-    setIsToggle(false);
+    toggleSection("productFilter")
   };
 
+
   useEffect(() => {
-    const productTypeValues = chips
-      .filter((chip) => chip.type === "productType")
-      .map((chip) => chip.value as ProductType)
+    const productTypeValue = chipsOfType(chips, "productType")[0];
+    const productSubTypeValues = chipsOfType(chips, "subType").map((chip) => chip.value);
+    const productTagValues = chipsOfType(chips, "productTag").map((chip) => chip.value);
+    const productColorValues = chipsOfType(chips, "productColor").map((chip) => chip.value);
+    const productSizesValues = chipsOfType(chips, "productSize").map((chip) => chip.value);
+    const priceChip = chipsOfType(chips, "price")[0];
 
-    const productSubTypeValues = chips
-      .filter((chip) => chip.type === "subType")
-      .map((chip) => chip.value as ProductSubType)
-
-    const productTagValues = chips
-      .filter((chip) => chip.type === "productTag")
-      .map((chip) => chip.value as number);
-
-    setValue("productType", productTypeValues)
+    setValue("productType", productTypeValue?.value ?? PRODUCT_TYPE.DEFAULT)
     setValue("subType", productSubTypeValues)
     setValue("productTag", productTagValues)
-
+    setValue("productColor", productColorValues)
+    setValue("productSize", productSizesValues)
+    setValue("maxPrice", priceChip?.maxPrice)
+    setValue("minPrice", priceChip?.minPrice)
   }, [chips, setValue]);
 
-  return (
+  useEffect(() => {
+    dispatch(getFilterColors({
+      ...buildBaseFilter(),
+      ...((productTag?.length ?? 0) > 0 && {
+        tags: productTag,
+      }),
+      ...((productSize?.length ?? 0) > 0 && {
+        sizes: productSize,
+      }),
+    }))
+  }, [categoryId, productType, productSubType, productTag, productSize, minPrice, maxPrice, dispatch, loadedCategory]);
 
+  useEffect(() => {
+    dispatch(getFilterTags({
+      ...buildBaseFilter(),
+      ...((productColor?.length ?? 0) > 0 && {
+        colors: productColor,
+      }),
+      ...((productSize?.length ?? 0) > 0 && {
+        sizes: productSize,
+      }),
+    }))
+  }, [categoryId, productType, productSubType, productSize, productColor, minPrice, maxPrice, dispatch, loadedCategory]);
+
+  useEffect(() => {
+    dispatch(
+      getFilterSizes({
+        ...buildBaseFilter(),
+        ...((productTag?.length ?? 0) > 0 && {
+          tags: productTag,
+        }),
+        ...((productColor?.length ?? 0) > 0 && {
+          colors: productColor,
+        }),
+      }))
+  }, [categoryId, productType, productSubType, productTag, productColor, minPrice, maxPrice, dispatch, loadedCategory]);
+
+  return (
     <div className="filter-container relative">
       <div className="product-filter__header">
         <button
-          onClick={ toggle }
+          onClick={ () => toggleSection("productFilter") }
           type="button"
         >
           <Menu/>
         </button>
       </div>
       <div
-        className={ `product-filter__overlay ${ isToggle ? "open" : "" }` }
-        onClick={ toggle }
+        className={ `product-filter__overlay ${ openSection.productFilter ? "open" : "" }` }
+        onClick={ () => toggleSection("productFilter") }
       ></div>
 
       <div
         ref={ filterProductRef }
         className={ `product-filter__dropdown ${
-          isToggle ? "product-filter__dropdown--open" : ""
+          openSection.productFilter ? "product-filter__dropdown--open" : ""
         }` }
       >
         <div className="product-filter">
@@ -206,7 +336,7 @@ const ProductFilterMenu = () => {
               <button
                 type="button"
                 className="product-filter__category-header"
-                onClick={ toggle }
+                onClick={ () => toggleSection("productFilter") }
               >
                 <span>FILTERS</span>
                 <X size={ 20 }/>
@@ -217,239 +347,262 @@ const ProductFilterMenu = () => {
               onSubmit={ handleSubmit(onSubmit) }
             >
 
-              <div className="product-filter__category">
-                <button
-                  type="button"
-                  className="product-filter__category-header"
-                  onClick={ toggleProductType }
-                >
-                  <span>CATEGORY</span>
-                  <ChevronUp className={ isProductTypeOpen ? "" : "rotate-180" } size={ 16 }/>
-                </button>
-                <div
-                  className={ `product-filter__category-list ${
-                    isProductTypeOpen
-                      ? "product-filter__category-list--open"
-                      : ""
-                  }` }
-                >
-                  <div>
-                    <Controller
-                      name="productType"
-                      control={ control }
-                      render={ ({field}) => (
-                        <>
-                          { productTypeOptions.map((option) => {
-                            const checked = field.value.includes(option.value);
-                            return (
-                              <label key={ option.value } className="product-filter__category-item">
-                                <input
-                                  type="checkbox"
-                                  checked={ checked }
-                                  onChange={ () => {
-                                    const newValue = checked
-                                      ? field.value.filter(
-                                        (value) => value !== option.value,
-                                      )
-                                      : [...field.value, option.value];
-                                    field.onChange(newValue);
-                                  } }
-                                />
-                                <span className="product-filter__category-label">{ option.label }</span>
-                              </label>
-                            );
-                          }) }
-                        </>
-                      ) }
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="product-filter__category">
-                <button
-                  type="button"
-                  className="product-filter__category-header"
-                  onClick={ toggleProductSubType }
-                >
-                  <span>SUB TYPE</span>
-                  <ChevronUp className={ isProductSubTypeOpen ? "" : "rotate-180" } size={ 16 }/>
-                </button>
-                <div
-                  className={ `product-filter__category-list ${
-                    isProductSubTypeOpen
-                      ? "product-filter__category-list--open"
-                      : ""
-                  }` }
-                >
-                  <div>
-                    <Controller
-                      name="subType"
-                      control={ control }
-                      render={ ({field}) => (
-                        <>
-                          { productSubTypeOptions.map((option) => {
-                            const checked = field.value.includes(option.value);
-                            return (
-                              <label key={ option.value } className="product-filter__category-item">
-                                <input
-                                  type="checkbox"
-                                  checked={ checked }
-                                  onChange={ () => {
-                                    const newValue = checked
-                                      ? field.value.filter(
-                                        (value) => value !== option.value,
-                                      )
-                                      : [...field.value, option.value];
-
-                                    field.onChange(newValue);
-                                  } }
-                                />
-                                <span className="product-filter__category-label">{ option.label }</span>
-                              </label>
-                            );
-                          }) }
-                        </>
-                      ) }
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="product-filter__category">
-                <button
-                  type="button"
-                  className="product-filter__category-header"
-                  onClick={ toggleProductTag }
-                >
-                  <span>TAGS</span>
-                  <ChevronUp className={ isProductTagOpen ? "" : "rotate-180" } size={ 16 }/>
-                </button>
-                <div
-                  className={ `product-filter__category-list ${
-                    isProductTagOpen
-                      ? "product-filter__category-list--open"
-                      : ""
-                  }` }
-                >
-                  <div>
-                    <Controller
-                      name="productTag"
-                      control={ control }
-                      render={ ({field}) => (
-                        <>
-                          { productTagsOptions.map((option) => {
-                            const checked = field.value.includes(option.value);
-                            return (
-                              <label key={ option.value } className="product-filter__category-item">
-                                <input
-                                  type="checkbox"
-                                  checked={ checked }
-                                  onChange={ () => {
-                                    const newValue = checked
-                                      ? field.value.filter(
-                                        (value) => value !== option.value,
-                                      )
-                                      : [...field.value, option.value];
-
-                                    field.onChange(newValue);
-                                  } }
-                                />
-                                <span className="product-filter__category-label">{ option.label }</span>
-                              </label>
-                            );
-                          }) }
-                        </>
-                      ) }
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="product-filter__category">
-                <button
-                  type="button"
-                  className="product-filter__category-header"
-                  onClick={ togglePrice }
-                >
-                  <span>PRICE</span>
-                  <ChevronUp className={ isPriceOpen ? "" : "rotate-180" } size={ 16 }/>
-                </button>
-                <div
-                  className={ `product-filter__category-list ${
-                    isPriceOpen
-                      ? "product-filter__category-list--open"
-                      : ""
-                  }` }
-                >
-                  <div className="product-filter__price">
-                    <div className="form-group">
-                      <div className="product-filter__price-content gap-3">
-                        <div className="input-group flex-1">
-                          <div className="input-wrapper product-filter__price-input-wrapper px-3 py-2">
-                            <span>$</span>
+              <FilterCategory
+                title={ "CATEGORY" }
+                isOpen={ openSection.productType }
+                onToggle={ () => toggleSection("productType") }
+              >
+                <Controller
+                  name="productType"
+                  control={ control }
+                  render={ ({field}) => (
+                    <>
+                      { productTypeOptions.map((option) => {
+                        const checked = field?.value === option.value;
+                        return (
+                          <label key={ option.value } className="product-filter__category-item">
                             <input
-                              id="minPrice"
-                              type="number"
-                              step="0.01"
-                              min={ MIN_PRICE_LIMIT }
-                              max={ MAX_PRICE_LIMIT }
-                              { ...register("minPrice", {
-                                valueAsNumber: true,
-                                min: {
-                                  value: MIN_PRICE_LIMIT,
-                                  message: `Price must be at least ${ MIN_PRICE_LIMIT }`,
-                                },
-                                max: {
-                                  value: MAX_PRICE_LIMIT,
-                                  message: `Price cannot exceed ${ MAX_PRICE_LIMIT }`,
-                                },
-                              }) }
-                              className="product-filter__price-input form-control w-full"
+                              type="checkbox"
+                              checked={ checked }
+                              onChange={ () => {
+                                field.onChange(
+                                  checked ? PRODUCT_TYPE.DEFAULT : option.value,
+                                );
+                              } }
                             />
+                            <span className="product-filter__category-label">{ option.label }</span>
+                          </label>
+                        );
+                      }) }
+                    </>
+                  ) }
+                />
+              </FilterCategory>
 
-                          </div>
-                        </div>
+              { productType === PRODUCT_TYPE.CLOTHING && (
+                <FilterCategory
+                  title={ "SUB TYPE" }
+                  isOpen={ openSection.productSubType }
+                  onToggle={ () => toggleSection("productSubType") }
+                >
+                  <Controller
+                    name="subType"
+                    control={ control }
+                    render={ ({field}) => (
+                      <>
+                        { productSubTypeOptions.map((option) => {
+                          const checked = field.value.includes(option.value);
+                          return (
+                            <label key={ option.value }
+                                   className="product-filter__category-item">
+                              <input
+                                type="checkbox"
+                                checked={ checked }
+                                onChange={ () => {
+                                  const newValue = checked
+                                    ? field.value.filter(
+                                      (value) => value !== option.value,
+                                    )
+                                    : [...field.value, option.value];
 
-                        <span className="text-gray-400 lowercase">to</span>
+                                  field.onChange(newValue);
+                                } }
+                              />
+                              <span className="product-filter__category-label">{ option.label }</span>
+                            </label>
+                          );
+                        }) }
+                      </>
+                    ) }
+                  />
+                </FilterCategory>
+              ) }
 
-                        <div className="input-group flex-1">
-                          <div className="input-wrapper product-filter__price-input-wrapper px-3 py-2">
-                            <span>$</span>
+              <FilterCategory
+                title={ "TAGS" }
+                isOpen={ openSection.productTag }
+                onToggle={ () => toggleSection("productTag") }
+              >
+                <Controller
+                  name="productTag"
+                  control={ control }
+                  render={ ({field}) => (
+                    <>
+                      { tagsFilter && tagsFilter.map((option) => {
+                        const checked = field.value.includes(option.id);
+                        return (
+                          <label key={ option.id } className="product-filter__category-item">
                             <input
-                              id="maxPrice"
-                              type="number"
-                              step="0.01"
-                              min={ MIN_PRICE_LIMIT }
-                              max={ MAX_PRICE_LIMIT }
-                              { ...register("maxPrice", {
-                                valueAsNumber: true,
-                                min: {
-                                  value: MIN_PRICE_LIMIT,
-                                  message: `Price must be at least ${ MIN_PRICE_LIMIT }`,
-                                },
-                                max: {
-                                  value: MAX_PRICE_LIMIT,
-                                  message: `Price cannot exceed ${ MAX_PRICE_LIMIT }`,
-                                },
-                              }) }
-                              className="product-filter__price-input form-control w-full"
+                              type="checkbox"
+                              checked={ checked }
+                              onChange={ () => {
+                                const newValue = checked
+                                  ? field.value.filter(
+                                    (value) => value !== option.id,
+                                  )
+                                  : [...field.value, option.id];
+
+                                field.onChange(newValue);
+                              } }
                             />
-                          </div>
-                        </div>
+                            <span className="product-filter__category-label">{ option.title }</span>
+                          </label>
+                        );
+                      }) }
+                    </>
+                  ) }
+                />
+              </FilterCategory>
+
+              <FilterCategory
+                title={ "COLORS" }
+                isOpen={ openSection.productColor }
+                onToggle={ () => toggleSection("productColor") }
+              >
+                <div className="product-filter__option-container py-2 px-2">
+                  <Controller
+                    name="productColor"
+                    control={ control }
+                    render={ ({field}) => (
+                      <>
+                        { colorsFilter && colorsFilter.map((color) => {
+                          const checked = field.value.includes(color.id);
+                          return (
+                            <label
+                              key={ color.id }
+                              className={ `product-filter__option product-filter__color ${
+                                checked ? "product-filter__option--active" : ""
+                              }` }
+                              style={ {backgroundColor: color.hex} }
+                            >
+                              <input
+                                type="checkbox"
+                                checked={ checked }
+                                onChange={ () => {
+                                  const newValue = checked
+                                    ? field.value.filter((id) => id !== color.id)
+                                    : [...field.value, color.id];
+                                  field.onChange(newValue);
+                                } }
+                              />
+                            </label>
+                          );
+                        }) }
+                      </>
+                    ) }
+                  />
+                </div>
+              </FilterCategory>
+
+              <FilterCategory
+                title={ "SIZE" }
+                isOpen={ openSection.productSize }
+                onToggle={ () => toggleSection("productSize") }
+              >
+                <div className="product-filter__option-container py-2 px-2">
+                  <Controller
+                    name="productSize"
+                    control={ control }
+                    render={ ({field}) => (
+                      <>
+                        { sizesFilter && sizesFilter.map((size) => {
+                          const checked = field.value.includes(size);
+                          return (
+                            <label
+                              key={ size }
+                              className={ `product-filter__option product-filter__size ${
+                                checked ? "product-filter__option--active" : ""
+                              }` }
+                            >
+                              <input
+                                type="checkbox"
+                                checked={ checked }
+                                onChange={ () => {
+                                  const newValue = checked
+                                    ? field.value.filter((s) => s !== size)
+                                    : [...field.value, size];
+                                  field.onChange(newValue);
+                                } }
+                              />
+                              { PRODUCT_SIZE_LABEL[size] }
+                            </label>
+                          );
+                        }) }
+                      </>
+                    ) }
+                  />
+                </div>
+              </FilterCategory>
+
+              <FilterCategory
+                title={ "PRICE" }
+                isOpen={ openSection.productPrice }
+                onToggle={ () => toggleSection("productPrice") }
+              >
+                <div className="product-filter__price">
+                  <div className="product-filter__price-content gap-3">
+                    <div className="input-group flex-1">
+                      <div className="input-wrapper product-filter__price-input-wrapper px-3 py-2">
+                        <span>$</span>
+                        <input
+                          id="minPrice"
+                          type="number"
+                          step="0.01"
+                          min={ MIN_PRICE_LIMIT }
+                          max={ MAX_PRICE_LIMIT }
+                          { ...register("minPrice", {
+                            setValueAs: (value) => (value === "" ? undefined : Number(value)),
+                            min: {
+                              value: MIN_PRICE_LIMIT,
+                              message: `Price must be at least ${ MIN_PRICE_LIMIT }`,
+                            },
+                            max: {
+                              value: MAX_PRICE_LIMIT,
+                              message: `Price cannot exceed ${ MAX_PRICE_LIMIT }`,
+                            },
+                          }) }
+                          className="product-filter__price-input form-control w-full"
+                        />
                       </div>
+                    </div>
 
-                      <div>
-                        { errors.minPrice &&
-                          <p className="product-filter__price-input-error">{ errors.minPrice.message }</p> }
-                        { errors.maxPrice && (
-                          <p className="product-filter__price-input-error">{ errors.maxPrice.message }</p>
-                        ) }
+                    <span className="text-gray-400 lowercase">to</span>
+
+                    <div className="input-group flex-1">
+                      <div className="input-wrapper product-filter__price-input-wrapper px-3 py-2">
+                        <span>$</span>
+                        <input
+                          id="maxPrice"
+                          type="number"
+                          step="0.01"
+                          min={ MIN_PRICE_LIMIT }
+                          max={ MAX_PRICE_LIMIT }
+                          { ...register("maxPrice", {
+                            setValueAs: (value) => (value === "" ? undefined : Number(value)),
+                            min: {
+                              value: MIN_PRICE_LIMIT,
+                              message: `Price must be at least ${ MIN_PRICE_LIMIT }`,
+                            },
+                            max: {
+                              value: MAX_PRICE_LIMIT,
+                              message: `Price cannot exceed ${ MAX_PRICE_LIMIT }`,
+                            },
+                          }) }
+                          className="product-filter__price-input form-control w-full"
+                        />
                       </div>
                     </div>
                   </div>
+
+                  <div>
+                    { errors.minPrice &&
+                      <p className="product-filter__price-input-error">{ errors.minPrice.message }</p> }
+                    { errors.maxPrice && (
+                      <p className="product-filter__price-input-error">{ errors.maxPrice.message }</p>
+                    ) }
+                  </div>
                 </div>
-              </div>
+              </FilterCategory>
             </form>
           </div>
           <footer className="product-filter__footer">
@@ -457,7 +610,6 @@ const ProductFilterMenu = () => {
               VIEW RESULTS
             </button>
           </footer>
-
         </div>
       </div>
     </div>

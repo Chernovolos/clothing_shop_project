@@ -51,7 +51,7 @@ export type ProductSubType = typeof PRODUCT_SUBTYPE[keyof typeof PRODUCT_SUBTYPE
 
 export const productSubTypeOptions = [
   // {label: "All types", value: PRODUCT_SUBTYPE.DEFAULT},
-  { label: "T_SHIRT", value: PRODUCT_SUBTYPE.T_SHIRT },
+  { label: "T-SHIRT", value: PRODUCT_SUBTYPE.T_SHIRT },
   { label: "JEANS", value: PRODUCT_SUBTYPE.JEANS },
   { label: "BLAZERS", value: PRODUCT_SUBTYPE.BLAZERS },
   { label: "JACKETS", value: PRODUCT_SUBTYPE.JACKETS },
@@ -67,6 +67,7 @@ export const productSubTypeOptions = [
 
 // --- SIZES (XS, S, M...) ---
 export const PRODUCT_SIZE =  {
+  ONE_SIZE: 0,
   XXS: 1,
   XS: 2,
   S: 3,
@@ -79,6 +80,7 @@ export const PRODUCT_SIZE =  {
 export type ProductSize = typeof PRODUCT_SIZE[keyof typeof PRODUCT_SIZE];
 
 export const PRODUCT_SIZE_LABEL: Record<number, string> = {
+  0: "one size",
   1: "XXS",
   2: "XS",
   3: "S",
@@ -96,33 +98,4 @@ export const labelToSize = (label: keyof typeof PRODUCT_SIZE) => {
   return PRODUCT_SIZE[label];
 };
 
-// ----- TAGS
-export const productTagsOptions = [
-  // { label: "All styles", value: "" },
-  { label: "Baggy", value: 1 },
-  { label: "High Waist", value: 2 },
-  { label: "Mom Fit", value: 3 },
-  { label: "Balloon", value: 4 },
-  { label: "Mid", value: 5 },
-  { label: "Barrel", value: 6 },
-  { label: "Straight", value: 7 },
-  { label: "Classic", value: 8 },
-  { label: "Slim Fit", value: 9 },
-  { label: "Denim", value: 10 },
-  { label: "Cotton", value: 11 },
-  { label: "Basic", value: 12 },
-  { label: "Jersey", value: 13 },
-  { label: "Relaxed Fit", value: 14 },
-  { label: "Tailored", value: 15 },
-  { label: "Minimal", value: 16 },
-  { label: "Structured", value: 17 },
-  { label: "Oversized", value: 18 },
-  { label: "Elegant", value: 19 },
-  { label: "Relaxed", value: 20 },
-  { label: "Premium", value: 21 },
-  { label: "Regular Fit", value: 22 },
-  { label: "Straight Fit", value: 23 },
-  { label: "Wool", value: 24 },
-  { label: "Essential", value: 25 },
-];
 

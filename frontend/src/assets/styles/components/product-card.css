@@ -1,6 +1,6 @@
 @layer components {
     .section-product {
-        @apply mt-42;
+        @apply mt-42 mb-10;
     }
 
     .product-category-title {
