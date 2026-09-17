@@ -7,7 +7,6 @@ import { useCurrencyContext } from "@/contexts/CurrencyContext.tsx";
 const Order = () => {
   const order = useAppSelector(selectOrder);
   const navigate = useNavigate();
-
   const { getCurrencySymbol, convertToCurrency } = useCurrencyContext();
 
   return (
@@ -17,7 +16,7 @@ const Order = () => {
           <h2 className="cart-title--header">Cart</h2>
           <div className="cart-wrapper page">
             {
-              order ? (
+              order && order.orderItems.length > 0 ? (
                 order?.orderItems?.map((item) => (
                   <ProductCart key={ item.id } orderItem={item} variant={"page"}/>
                 ))
