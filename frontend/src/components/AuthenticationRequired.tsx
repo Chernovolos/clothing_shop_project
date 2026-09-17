@@ -4,7 +4,7 @@ import { useAuthModal } from "@/contexts/AuthModalContext.tsx";
 type Props = {
   onClose?: () => void;
   title?: string;
-  variant : 'overlay' | 'inline';
+  variant : 'overlay' | 'inline'| 'page';
 }
 
 const AuthenticationRequired = ({ onClose, variant, title = "Please, login to continue shopping." }: Props) => {

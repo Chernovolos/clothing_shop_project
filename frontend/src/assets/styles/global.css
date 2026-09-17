@@ -4,6 +4,9 @@
   --font-raleway: "Raleway";
   --font-roboto: "Roboto Condensed";
 
+  --color-black: #000000;
+  --color-transparent: transparent;
+
   /* TEXT */
   --color-text: #1D1F22;
   --color-text-light: #FFFFFF;
@@ -24,6 +27,7 @@
   --color-overlay: rgba(0, 0, 0, 0.5);
 
   --color-border: #E5E5E5;
+  --color-border-dark: #1a1a1a;
 
   /* BACKGROUND */
   --color-bg: #FFFFFF;
@@ -31,6 +35,7 @@
   --color-bg-accent: #5ECE7B;
   --color-bg-dark: #1D1F22;
   --color-bg-overlay: rgba(0, 0, 0, 0.5);
+  --color-bg-text: #E5E5E5;
 
   --detail-medium-contrast: rgb(234, 234, 234);
   --text-body: rgb(54, 49, 61);
@@ -44,7 +49,6 @@
 
   --color-surface: #1a1a1a;
   --color-border: #43464e;
-
   --color-primary: #1dcf65;
   --color-primary-foreground: #000000;
 }

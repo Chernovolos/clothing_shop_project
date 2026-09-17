@@ -16,3 +16,5 @@
 @import "./components/order-list.css";
 @import "./components/product-filter.css";
 @import "./components/home.css";
+@import "./components/loading.css";
+@import "./components/not-found.css";

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 
 type Currency = "USD" | "EUR" | "JPY"
 
@@ -26,21 +26,15 @@ const CurrencyContext = createContext<CurrencyContextValue | null>(null)
 export const CurrencyProvider  = ({children}: { children: React.ReactNode }) => {
   const [currency, setCurrency] = useState<Currency>('USD');
 
-  const convertToCurrency = (price: number) => {
-    return (price * rates[currency]).toFixed(2);
-  }
-
-  const getCurrencySymbol = () => {
-    return currencySymbols[currency];
-  }
+  const value = useMemo<CurrencyContextValue>(() => ({
+    currency,
+    setCurrency,
+    convertToCurrency: (price: number) => (price * rates[currency]).toFixed(2),
+    getCurrencySymbol: () => currencySymbols[currency],
+  }), [currency]);
 
   return (
-    <CurrencyContext.Provider value={{
-      currency,
-      setCurrency,
-      convertToCurrency,
-      getCurrencySymbol
-    }}>
+    <CurrencyContext.Provider value={value}>
       { children }
     </CurrencyContext.Provider>
   )

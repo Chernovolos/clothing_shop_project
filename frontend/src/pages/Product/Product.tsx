@@ -5,49 +5,63 @@ import {
   selectProducts,
   selectIsProductsLoading,
   selectProductChips,
-  selectHasProductsLoaded, selectLoadedCategory, clearAllProductChips, selectProductFilter,
+  selectHasProductsLoaded, selectLoadedCategory, clearAllProductChips, selectProductFilter, clearProductFilter,
 } from "@/slices/product.slice.ts";
-import {
-  CATEGORY_MAP,
-  PRODUCT_CATEGORY,
-  type ProductCategory,
-  productTypeOptions,
-} from "@/types/enums/product.enums.ts";
+import { CATEGORY_MAP, type ProductCategory, productTypeOptions } from "@/types/enums/product.enums.ts";
 import { getProducts } from "@/thunk/product.thunk.ts";
 import ProductCard from "../../components/ProductCard.tsx";
 import ProductFilterMenu from "@/components/ProductFilter/ProductFilterMenu.tsx";
 import ProductFilterChips from "@/components/ProductFilter/ProductFilterChips.tsx";
+import Loading from "@/components/Loading.tsx";
+import NotFound from "@/components/NotFound.tsx";
 
 const Product: React.FC = () => {
+  const dispatch = useAppDispatch();
+
   const {category} = useParams<{ category: 'women' | 'men' | 'kids' }>();
 
-  const dispatch = useAppDispatch();
   const products = useAppSelector(selectProducts);
   const isProductsLoading = useAppSelector(selectIsProductsLoading);
-  const chips = useAppSelector(selectProductChips);
   const hasProductsLoaded = useAppSelector(selectHasProductsLoaded);
+
   const loadedCategory = useAppSelector(selectLoadedCategory);
+
   const productFilter = useAppSelector(selectProductFilter);
-  console.log("productFilter", productFilter);
-  console.log("productFilter", productFilter);
+  const chips = useAppSelector(selectProductChips);
 
   const productTypeOption = productTypeOptions.find((option) => option.value === productFilter?.type)
   const title = productTypeOption?.label || ''
+
   const normalized = category?.toLowerCase().trim();
-  const categoryId: ProductCategory =
-    normalized && normalized in CATEGORY_MAP
-      ? CATEGORY_MAP[normalized as keyof typeof CATEGORY_MAP]
-      : PRODUCT_CATEGORY.DEFAULT;
+  const isValidCategory = !!normalized && normalized in CATEGORY_MAP;
+  const categoryId: ProductCategory | null = isValidCategory
+    ? CATEGORY_MAP[normalized as keyof typeof CATEGORY_MAP] : null
 
   useEffect(() => {
+    if (!categoryId) return;
     if (!hasProductsLoaded || loadedCategory !== categoryId) {
       dispatch(getProducts({
         categoryType: categoryId,
       }));
       dispatch(clearAllProductChips())
+      dispatch(clearProductFilter())
     }
 
-  }, [categoryId])
+  }, [categoryId, hasProductsLoaded, loadedCategory])
+
+  if (isProductsLoading) {
+    return <section className="section section-product">
+      <div className="container">
+        <Loading/>
+      </div>
+    </section>
+  }
+
+  if (!isValidCategory) {
+    return <section className="section section-product">
+      <div className="container"><NotFound reason={ "category" }/></div>
+    </section>
+  }
 
   return (
     <section id="welcome" className="section-product">
@@ -59,6 +73,7 @@ const Product: React.FC = () => {
                       gap-y-3
                       pb-10
                       sm:mt-10
+                      sm:grid-cols-2
                       md:pb-15
                       lg:pb-10
                       lg:grid-cols-2
@@ -79,19 +94,18 @@ const Product: React.FC = () => {
           </div>
         </div>
       </div>
-      { isProductsLoading ? (<div className="container">Loading...</div>) :
-        (
-          <div className="container">
-            <div
-              className="grid base:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-2 gap-y-4 lg:gap-x-6 lg:gap-y-8">
-              { products?.map((product) => (
-                <ProductCard key={ product.id } product={ product }/>
-              )) }
-            </div>
-          </div>
-        ) }
+      <div className="container">
+        <div
+          className="grid base:grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-2 gap-y-4 lg:gap-x-6 lg:gap-y-8">
+          {
+            products.length > 0 ? products.map((product) => (
+              <ProductCard key={ product.id } product={ product }/>
+            )) : <div>No products match your search.</div>
+          }
+        </div>
+      </div>
     </section>
-  );
+  )
 };
 
 export default Product;

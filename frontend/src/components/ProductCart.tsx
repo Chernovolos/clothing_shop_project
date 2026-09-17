@@ -1,7 +1,7 @@
 import ProductCartCarousel from "@/components/ProductCartCarousel.tsx";
 import type { OrderItemDto, UpdateOrderItemDto } from "@/types/dtos/order-item.dto.ts";
 import { useProductVariant } from "@/hooks/useProductVariant.ts";
-import { type ProductSize, sizeToLabel } from "@/types/enums/product.enums.ts";
+import { PRODUCT_SIZE, type ProductSize, sizeToLabel } from "@/types/enums/product.enums.ts";
 import { useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
 import { removeOrderItem, updateOrder } from "@/thunk/order.thunk.ts";
@@ -104,7 +104,7 @@ const ProductCart = ({orderItem, variant}: Props) => {
               return (
                 <button
                   key={ size }
-                  className={ `cart-btn-size  ${ variant } ${
+                  className={ `cart-btn-size  ${ variant } ${size === PRODUCT_SIZE.ONE_SIZE ? "w-[70px]" : ""} ${
                     isSelected ? "cart-btn-size--active" : ""
                   } ${ isUnavailable ? "cart-btn-size--unavailable" : "" }` }
                   onClick={ () => onSizeSelect(size) }

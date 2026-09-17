@@ -31,7 +31,7 @@ interface ProductState {
   products: ProductDetailsDto[];
   productError: string | null;
   productsError: string | null;
-  CategoriesError: string | null;
+
   isProductLoading: boolean;
   isProductsLoading: boolean;
   isCategoriesLoading: boolean;
@@ -57,9 +57,10 @@ interface ProductState {
 const initialState: ProductState = {
   product: null,
   products: [],
+
   productError: null,
   productsError: null,
-  CategoriesError: null,
+
   isProductLoading: false,
   isProductsLoading: false,
   isCategoriesLoading: false,
@@ -98,6 +99,7 @@ export const productSlice = createSlice({
       state.chips = [];
       state.tagsFilter = [];
       state.colorsFilter = [];
+      state.sizesFilter = [];
     },
 
     removeProductChip: (state, action: PayloadAction<ProductFilterChip>) => {
@@ -129,7 +131,6 @@ export const productSlice = createSlice({
       .addCase(getProductById.pending, (state) => {
         state.isProductLoading = true;
         state.productError = null;
-        // state.product = null;
       })
       .addCase(getProductById.fulfilled, (state, action) => {
         state.isProductLoading = false;

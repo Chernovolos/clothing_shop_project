@@ -8,6 +8,7 @@ import CheckoutOrder from "@/pages/Order/CheckoutOrder.tsx";
 import NotFound from "@/components/NotFound.tsx";
 import OrderDetails from "@/pages/Order/OrderDetails.tsx";
 import PrivateLayout from "@/components/PrivateLayout.tsx";
+import OrderHistory from "@/pages/Order/OrderHistory.tsx";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
         children: [
           {path: "order", element: <Order/>},
           {path: "order/checkout-order", element: <CheckoutOrder/>},
+          {path: "order/history", element: <OrderHistory/>},
           {path: "order/:orderId", element: <OrderDetails/>},
         ],
       },

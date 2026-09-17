@@ -384,7 +384,7 @@
 
     @media (max-width: 1023px) {
         .product-filter__header {
-            justify-content: center;
+            justify-content: end;
         }
     }
 

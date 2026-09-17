@@ -1,4 +1,4 @@
-import { createContext, type ReactNode, useContext, useState } from "react";
+import { createContext, type ReactNode, useContext, useMemo, useState } from "react";
 import AuthModalContent from "@/components/AuthModalContent.tsx";
 import PortalModal from "@/components/PortalModal.tsx";
 
@@ -15,13 +15,14 @@ const AuthModalContext = createContext<AuthModalContextType | null>(null);
 export const AuthModalProvider = ({children}: { children: ReactNode }) => {
   const [mode, setMode] = useState<AuthMode | null>(null);
 
+  const value = useMemo<AuthModalContextType>(() => ({
+    openLogin: () => setMode('login'),
+    openRegister: () => setMode('register'),
+    closeAuthModal: () => setMode(null),
+  }), []);
   return (
     <AuthModalContext.Provider
-      value={ {
-        openLogin: () => setMode('login'),
-        openRegister: () => setMode('register'),
-        closeAuthModal: () => setMode(null),
-      } }
+      value={ value }
     >
       { children }
 
