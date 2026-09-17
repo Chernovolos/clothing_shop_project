@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import { useAppDispatch, useAppSelector } from "@/app/hooks.ts";
 import { useProductStock } from "@/hooks/useProductStock.ts";
 import { selectIsProductLoading, selectProduct } from "@/slices/product.slice.ts";
-import { type ProductSize, sizeToLabel } from "@/types/enums/product.enums.ts";
+import { PRODUCT_SIZE, type ProductSize, sizeToLabel } from "@/types/enums/product.enums.ts";
 import { selectIsAuthenticated } from "@/slices/user.slice.ts";
 import AuthenticationRequired from "@/components/AuthenticationRequired.tsx";
 import ProductDetailsCarousel from "@/components/ProductDetailsCarousel.tsx";
@@ -11,6 +11,8 @@ import { getProductById } from "@/thunk/product-details.thunk.ts";
 import type { CreateOrderItemDto } from "@/types/dtos/order-item.dto.ts";
 import { addOrderItem } from "@/thunk/order.thunk.ts";
 import { useCurrencyContext } from "@/contexts/CurrencyContext.tsx";
+import Loading from "@/components/Loading.tsx";
+import NotFound from "@/components/NotFound.tsx";
 
 const ProductDetails = () => {
   const {id} = useParams<{ id: string }>();
@@ -24,7 +26,7 @@ const ProductDetails = () => {
   const [selectedColorId, setSelectedColorId] = useState<number | null>(null);
   const [selectedSize, setSelectedSize] = useState<ProductSize | null>(null);
 
-  const { getCurrencySymbol, convertToCurrency } = useCurrencyContext();
+  const {getCurrencySymbol, convertToCurrency} = useCurrencyContext();
 
   useEffect(() => {
     if (!normalizedProductId) return;
@@ -51,7 +53,13 @@ const ProductDetails = () => {
 
   }, [product])
 
-  if (!product) return <div>No product found</div>;
+
+  if (isProductLoading) {
+    return <section className="section section-product-details"><Loading/></section>
+  }
+  if (!product) {
+    return <section className="section section-product-details"><NotFound reason="product"/></section>
+  }
   const {title, price, description} = product;
 
   const getStock = (colorId: number, size: ProductSize) =>
@@ -109,7 +117,7 @@ const ProductDetails = () => {
   };
 
   const addItemToCart = () => {
-    if(product && selectedSize !== null && selectedColorId) {
+    if (product && selectedSize !== null && selectedColorId) {
       const stock = product.stocks.find(s => s.productSize === selectedSize && s.color && s.color.id === selectedColorId);
       if (stock) {
         const newItem: CreateOrderItemDto = {
@@ -127,77 +135,75 @@ const ProductDetails = () => {
 
   return (
     <section className="section section-product-details">
-      { isProductLoading ? (<div className="container"><h1>Loading...</h1></div>) :
-        (<div className="container">
-          <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-x-4">
-            <div className="col-span-6 lg:col-span-6">
-              <ProductDetailsCarousel
-                images={ imageMap.get(selectedColorId ?? 0) ?? [] }
-                outOfStock={ outOfStock }
-              />
+      <div className="container">
+        <div className="grid grid-cols-1 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-x-4">
+          <div className="col-span-6 lg:col-span-6">
+            <ProductDetailsCarousel
+              images={ imageMap.get(selectedColorId ?? 0) ?? [] }
+              outOfStock={ outOfStock }
+            />
+          </div>
+          <div className="col-span-3 lg:col-span-2 flex flex-col">
+            <h2 className="product-title">{ title }</h2>
+            <div className="flex">
+              { product.tags.map((tag) => {
+                return <p key={ tag.id } className="product-tag">{ tag.title }</p>
+              }) }
             </div>
-            <div className="col-span-3 lg:col-span-2 flex flex-col">
-              <h2 className="product-title">{ title }</h2>
-              <div className="flex">
-                { product.tags.map((tag) => {
-                  return <p key={ tag.id } className="product-tag">{ tag.title }</p>
-                }) }
-              </div>
 
-              <p className="product-size-title">size:</p>
-              <div className="product-btn-wrapper">
-                { outOfStock ? <div>OUT OF STOCK</div> :
-                  availableSizes.map((size, i) => {
+            <p className="product-size-title">size:</p>
+            <div className="product-btn-wrapper">
+              { outOfStock ? <div>OUT OF STOCK</div> :
+                availableSizes.map((size, i) => {
                   return (
                     <button
                       key={ i }
-                      className={ `product-btn-size ${
+                      className={ `product-btn-size ${size === PRODUCT_SIZE.ONE_SIZE ? "w-[70px]" : ""} ${
                         selectedSize === size ? "product-btn-size--active" : ""
                       } ${ isAvailableSizeByColor(size) ? "" : "product-btn-size--unavailable" }` }
                       onClick={ () => handleSizeChange(size) }
                     >{ sizeToLabel(size) }</button>
                   )
                 }) }
-              </div>
+            </div>
 
-              <p className="product-color-title">color:</p>
-              <div className="product-btn-wrapper">
-                { availableColors.map((color) => {
-                  return (
-                    <button
-                      key={ color.id }
-                      className={ `product-btn-color ${
-                        selectedColorId === color.id ? "product-btn-color--active" : ""
-                      } ${ isAvailableColorBySize(color.id) ? "" : "product-btn-color--disabled" }` }
-                      style={ {backgroundColor: color.hex} }
-                      onClick={ () => handleColorChange(color.id) }
-                      disabled={ !isAvailableColorBySize(color.id) }
-                    />
-                  )
-                }) }
-              </div>
-              <p className="product-price-title">price:</p>
-              <p className="product-price">{getCurrencySymbol()} { convertToCurrency(price) }</p>
-              { isAuthenticated && (
-                <>
+            <p className="product-color-title">color:</p>
+            <div className="product-btn-wrapper">
+              { availableColors.map((color) => {
+                return (
                   <button
-                    disabled={ !selectedColorId || selectedSize === null }
-                    onClick={ addItemToCart }
-                    className={ `product-btn-add ${ (!selectedColorId || selectedSize === null) ? "product-btn-add--disabled" : "" }` }
-                  >
-                    add to cart
-                  </button>
-                  <p className="product-description">{ description }</p>
-                </>
-              ) }
+                    key={ color.id }
+                    className={ `product-btn-color ${
+                      selectedColorId === color.id ? "product-btn-color--active" : ""
+                    } ${ isAvailableColorBySize(color.id) ? "" : "product-btn-color--disabled" }` }
+                    style={ {backgroundColor: color.hex} }
+                    onClick={ () => handleColorChange(color.id) }
+                    disabled={ !isAvailableColorBySize(color.id) }
+                  />
+                )
+              }) }
+            </div>
+            <p className="product-price-title">price:</p>
+            <p className="product-price">{ getCurrencySymbol() } { convertToCurrency(price) }</p>
+            { isAuthenticated && (
+              <>
+                <button
+                  disabled={ !selectedColorId || selectedSize === null }
+                  onClick={ addItemToCart }
+                  className={ `product-btn-add ${ (!selectedColorId || selectedSize === null) ? "product-btn-add--disabled" : "" }` }
+                >
+                  add to cart
+                </button>
+                <p className="product-description">{ description }</p>
+              </>
+            ) }
 
-              <div className="relative">
-                { !isAuthenticated && (<AuthenticationRequired variant={ 'inline' }/>) }
-              </div>
+            <div className="relative">
+              { !isAuthenticated && (<AuthenticationRequired variant={ 'inline' }/>) }
             </div>
           </div>
-        </div>)
-      }
+        </div>
+      </div>
     </section>
   )
 }

@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-import { sizeToLabel } from "@/types/enums/product.enums.ts";
+import { PRODUCT_SIZE, sizeToLabel } from "@/types/enums/product.enums.ts";
 import type { CreateOrderItemDto } from "@/types/dtos/order-item.dto.ts";
 import type { ProductDetailsDto } from "@/types/dtos/product.dto.ts";
 import { useProductVariant } from "@/hooks/useProductVariant.ts";
@@ -31,7 +31,7 @@ const AdHocStockSelector = ({product, isOpen, onClose}: Props) => {
   } = useProductVariant(product);
 
   const addItemToCart = () => {
-    if (product && selectedSize && selectedColorId) {
+    if (product && selectedSize !== null && selectedColorId !== null) {
       const stock = product.stocks.find(s => s.productSize === selectedSize && s.color && s.color.id === selectedColorId);
       if (stock) {
         const newItem: CreateOrderItemDto = {
@@ -66,7 +66,7 @@ const AdHocStockSelector = ({product, isOpen, onClose}: Props) => {
                       return (
                         <button
                           key={ size }
-                          className={ `product-btn-size ${
+                          className={ `product-btn-size ${size === PRODUCT_SIZE.ONE_SIZE ? "w-[70px]" : ""} ${
                             isSelected ? "product-btn-size--active" : ""
                           } ${ isUnavailable ? "product-btn-size--unavailable" : "" }` }
                           onClick={ () => handleSizeSelect(size) }

@@ -1,8 +1,8 @@
-import type { CheckoutOrderDto, OrderDto } from "@/types/dtos/order.dto.ts";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import type { RejectValue } from "@/types/dtos/custom-error.dto.ts";
 import apiService from "@/services/api.service.ts";
 import type { CreateOrderItemDto, UpdateOrderItemDto } from "@/types/dtos/order-item.dto.ts";
+import type { CheckoutOrderDto, OrderDto, OrderDetailsDto } from "@/types/dtos/order.dto.ts";
 
 export const getOrCreateOrder = createAsyncThunk<
   OrderDto,
@@ -78,6 +78,38 @@ export const checkOutOrder = createAsyncThunk<
   async (checkoutOrderDto, thunkAPI) => {
     try {
       const result = await apiService.checkOutOrder(checkoutOrderDto)
+      return result;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+)
+
+export const getOrderById = createAsyncThunk<
+  OrderDetailsDto,
+  number,
+  { rejectValue: RejectValue }
+>(
+  'orders/getOrderById',
+  async (id, thunkAPI) => {
+    try {
+      const result = await apiService.getOrderById(id);
+      return result;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(error);
+    }
+  },
+)
+
+export const getOrders = createAsyncThunk<
+  OrderDetailsDto[],
+  void,
+  { rejectValue: RejectValue }
+>(
+  'orders/getOrders',
+  async (_, thunkAPI) => {
+    try {
+      const result = await apiService.getOrders();
       return result;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(error);

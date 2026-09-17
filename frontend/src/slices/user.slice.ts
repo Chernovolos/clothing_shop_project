@@ -14,6 +14,7 @@ interface UsersState {
   isAuthenticated: boolean;
   authLoading: boolean;
   authError: string | null;
+  hasCheckedAuth: boolean;
 }
 
 const initialState: UsersState = {
@@ -26,6 +27,7 @@ const initialState: UsersState = {
   isAuthenticated: false,
   authLoading: false,
   authError: null,
+  hasCheckedAuth: false
 }
 
 export const userSlice = createSlice({
@@ -83,11 +85,13 @@ export const userSlice = createSlice({
         state.authLoading = false;
         state.user = action.payload;
         state.isAuthenticated = true;
+        state.hasCheckedAuth = true;
       })
       .addCase(getSelfUser.rejected, (state, action) => {
         state.authLoading = false;
         state.user = null;
         state.accessToken = null;
+        state.hasCheckedAuth = true;
         state.authError = action.payload?.message || "Something went wrong";
         state.isAuthenticated = false;
       })
@@ -102,5 +106,6 @@ export const selectUsesLoading = (state: RootState) => state.userSlice.isUserLoa
 export const selectAccessToken = (state: RootState) => state.userSlice.accessToken;
 export const selectAuthLoading = (state: RootState) => state.userSlice.authLoading;
 export const selectIsAuthenticated = (state: RootState) => state.userSlice.isAuthenticated;
+export const selectHasCheckedAuth = (state: RootState) => state.userSlice.hasCheckedAuth;
 export const selectAuthError = (state: RootState) => state.userSlice.authError;
 export default userSlice.reducer;

@@ -21,6 +21,11 @@ const Profile = ({ isOpen, onClose }: Props) => {
     onClose();
     navigate("/women");
   }
+
+  const navigateToOrderHistory  = () => {
+    onClose();
+    navigate("order/history");
+  }
   return (
     <>
       <div
@@ -39,7 +44,7 @@ const Profile = ({ isOpen, onClose }: Props) => {
               <p className="profile-list__email">{user?.email}</p>
             </div>
             <div className="profile-list">
-              <p className="profile-list__link">my purchases</p>
+              <p onClick={navigateToOrderHistory} className="profile-list__link">my purchases</p>
             </div>
             <button
               className="profile-btn"

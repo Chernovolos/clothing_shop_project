@@ -2,7 +2,7 @@ import axios, { type AxiosInstance } from "axios";
 import { type ProductDetailsDto, type ProductFilterDto } from "@/types/dtos/product.dto.ts";
 import type { CreateUserDto, UserDto, UserLoginDto } from "@/types/dtos/user.dto.ts";
 import type { AuthResponseDto } from "@/types/dtos/auth.dto.ts";
-import type { CheckoutOrderDto, OrderDto } from "@/types/dtos/order.dto.ts";
+import type { CheckoutOrderDto, OrderDetailsDto, OrderDto } from "@/types/dtos/order.dto.ts";
 import type { CreateOrderItemDto, UpdateOrderItemDto } from "@/types/dtos/order-item.dto.ts";
 import type { TagDto, TagFilterDto } from "@/types/dtos/tag.dto.ts";
 import type { ColorDto, ColorFilterDto } from "@/types/dtos/color.dto.ts";
@@ -103,6 +103,16 @@ class ApiService {
 
   public async filterSizes(filter: ProductFilterDto): Promise<ProductSize[]> {
     const result = await ApiService.api.post<ProductSize[]>(`/stock/filter`, filter)
+    return result.data;
+  }
+
+  public async getOrderById(id: number): Promise<OrderDetailsDto> {
+    const result = await ApiService.api.get<OrderDetailsDto>(`/orders/order/${id}`)
+    return result.data;
+  }
+
+  public async getOrders(): Promise<OrderDetailsDto[]> {
+    const result = await ApiService.api.get<OrderDetailsDto[]>(`/orders/history`);
     return result.data;
   }
 }

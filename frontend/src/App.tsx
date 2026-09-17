@@ -5,14 +5,16 @@ import { getSelfUser } from "@/thunk/user.thunk.ts";
 import Header from "./components/Header";
 import { AuthModalProvider } from "@/contexts/AuthModalContext.tsx";
 import { getOrCreateOrder } from "@/thunk/order.thunk.ts";
-import { selectIsAuthenticated } from "@/slices/user.slice.ts";
+import { selectHasCheckedAuth, selectIsAuthenticated } from "@/slices/user.slice.ts";
 import { APIProvider } from "@vis.gl/react-google-maps";
 import { ScrollToTop } from "@/components/ScrollToTop.tsx";
 import { CurrencyProvider } from "@/contexts/CurrencyContext.tsx";
+import Loading from "@/components/Loading.tsx";
 
 function App() {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const hasCheckedAuth = useAppSelector(selectHasCheckedAuth);
 
   useEffect(() => {
     dispatch(getSelfUser());
@@ -24,6 +26,10 @@ function App() {
       dispatch(getOrCreateOrder());
     }
   }, [isAuthenticated, dispatch]);
+
+  if (!hasCheckedAuth) {
+    return <Loading />;
+  }
 
   return (
     <>

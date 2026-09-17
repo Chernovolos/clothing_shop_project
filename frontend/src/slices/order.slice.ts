@@ -1,25 +1,45 @@
-import type { OrderDto } from "@/types/dtos/order.dto.ts";
+import type { OrderDetailsDto, OrderDto } from "@/types/dtos/order.dto.ts";
 import type { RootState } from "../app/store.ts";
 import type { OrderItemDto } from "@/types/dtos/order-item.dto.ts";
 import { createSlice } from "@reduxjs/toolkit";
-import { addOrderItem, checkOutOrder, getOrCreateOrder, removeOrderItem, updateOrder } from "@/thunk/order.thunk.ts";
+import {
+  addOrderItem,
+  checkOutOrder,
+  getOrCreateOrder,
+  getOrderById, getOrders,
+  removeOrderItem,
+  updateOrder,
+} from "@/thunk/order.thunk.ts";
 
 interface OrderState {
   order: OrderDto | null;
   orderItem: OrderItemDto | null;
+  orders: OrderDetailsDto[] | null;
 
   isOrderLoading: boolean;
   orderError: string | null;
-
   completedOrder: OrderDto | null;
+
+  isOrderDetailsLoading: boolean;
+  orderDetailsError: string | null;
+  orderDetails: OrderDetailsDto | null;
+
+  isOrdersLoading: boolean;
+  ordersError: string | null;
 }
 
 const initialState: OrderState = {
   order: null,
   orderItem: null,
+  orders: null,
   isOrderLoading: false,
   orderError: null,
   completedOrder: null,
+  orderDetails:null,
+  isOrderDetailsLoading: false,
+  orderDetailsError: null,
+  isOrdersLoading: false,
+  ordersError: null,
 }
 
 export const orderSlice = createSlice({
@@ -121,6 +141,44 @@ export const orderSlice = createSlice({
           action.error.message ??
           "Something went wrong";
       })
+
+    //GET ORDER BY ID//
+      .addCase(getOrderById.pending, (state) => {
+        state.isOrderDetailsLoading = true;
+        state.orderDetailsError = null;
+      })
+
+      .addCase(getOrderById.fulfilled, (state, action) => {
+        state.isOrderDetailsLoading = false;
+        state.orderDetails = action.payload;
+      })
+
+      .addCase(getOrderById.rejected, (state, action) => {
+        state.isOrderDetailsLoading = false;
+        state.orderDetailsError =
+          action.payload?.message ??
+          action.error.message ??
+          "Something went wrong";
+      })
+
+      //GET ORDERS //
+      .addCase(getOrders.pending, (state) => {
+        state.isOrdersLoading = true;
+        state.ordersError = null;
+      })
+
+      .addCase(getOrders.fulfilled, (state, action) => {
+        state.isOrdersLoading = false;
+        state.orders = action.payload;
+      })
+
+      .addCase(getOrders.rejected, (state, action) => {
+        state.isOrdersLoading = false;
+        state.ordersError =
+          action.payload?.message ??
+          action.error.message ??
+          "Something went wrong";
+      })
   },
 })
 
@@ -130,4 +188,11 @@ export const selectOrder = (state: RootState) => state.orderSlice.order;
 export const selectIsOrderLoading = (state: RootState) => state.orderSlice.isOrderLoading;
 export const selectOrderError = (state: RootState) => state.orderSlice.orderError;
 
+export const selectOrderDetails = (state: RootState) => state.orderSlice.orderDetails;
+export const selectIsOrderDetailsLoading = (state: RootState) => state.orderSlice.isOrderDetailsLoading;
+export const selectOrderDetailsError = (state: RootState) => state.orderSlice.orderDetailsError;
+
+export const selectOrders = (state: RootState) => state.orderSlice.orders;
+export const selectIsOrdersLoading = (state: RootState) => state.orderSlice.isOrdersLoading;
+export const selectOrdersError = (state: RootState) => state.orderSlice.ordersError;
 export default orderSlice.reducer;
